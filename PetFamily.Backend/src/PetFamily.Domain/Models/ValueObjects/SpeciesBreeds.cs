@@ -7,10 +7,10 @@ public class SpeciesBreeds : ValueObject
     public Guid SpeciesId { get; }
     public Guid BreedId { get; }
 
-    public SpeciesBreeds(Guid speciesID, Guid breedID)
+    public SpeciesBreeds(Guid speciesId, Guid breedId)
     {
-        SpeciesId = speciesID;
-        BreedId = breedID;
+        SpeciesId = speciesId;
+        BreedId = breedId;
     }
     
     protected override IEnumerable<object> GetEqualityComponents()
