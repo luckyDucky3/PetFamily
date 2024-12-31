@@ -1,5 +1,6 @@
-﻿namespace PetFamily.Application;
+namespace PetFamily.Application;
 
 public class Class1
 {
+    
 }
