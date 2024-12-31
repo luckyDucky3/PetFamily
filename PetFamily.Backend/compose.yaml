@@ -1,0 +1,15 @@
+﻿services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: pet_family
+      POSTGRES_USER: Admin
+      POSTGRES_PASSWORD: 100506Ki
+    ports: 
+      - 5435:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:
