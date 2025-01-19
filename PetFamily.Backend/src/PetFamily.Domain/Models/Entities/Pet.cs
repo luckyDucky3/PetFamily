@@ -1,11 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Enums;
-using PetFamily.Domain.Models.Species;
-using PetFamily.Domain.Models.ValueObjects;
+using PetFamily.Domain.Models.Ids;
+using PetFamily.Domain.Models.VO;
 
-namespace PetFamily.Domain.Models;
+namespace PetFamily.Domain.Models.Entities;
 
-public class Pet : Entity<Guid>
+public class Pet : Entity<PetId>
 {
     //EF
     private Pet()
@@ -28,12 +28,12 @@ public class Pet : Entity<Guid>
     public string Color { get; private set; } = null!;
     public string Address { get; private set; } = null!;
     public string InfoAboutHealth { get; private set; } = null!;
-    public double Weight { get; private set; }
-    public double Height { get; private set; }
+    public double? Weight { get; private set; }
+    public double? Height { get; private set; }
     public string PhoneNumber { get; private set; } = null!;
     public bool IsCastrate { get; private set; }
     public bool IsVaccinate { get; private set; }
-    public DateTime BirthDate { get; private set; } = default!;
+    public DateTime? BirthDate { get; private set; }
     public Status Status { get; private set; }
     public DateTime CreatedOn { get; private set; } = default!;
 }
