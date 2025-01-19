@@ -4,15 +4,15 @@ namespace PetFamily.Domain.Models.ValueObjects
 {
     public class PhoneNumber : ValueObject
     {
-        public string Number { get; }
+        public string Value { get; }
 
-        public PhoneNumber(string number)
+        public PhoneNumber(string value)
         {
-            Number = number;
+            Value = value;
         }
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return Number;
+            yield return Value;
         }
     }
 }

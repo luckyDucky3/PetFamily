@@ -4,7 +4,7 @@
     image: postgres
     restart: always
     environment:
-      POSTGRES_DB: pet_family
+      POSTGRES_DB: PetFamily
       POSTGRES_USER: Admin
       POSTGRES_PASSWORD: 100506Ki
     ports: 
@@ -13,3 +13,4 @@
       - postgres-data:/var/lib/postgresql/data
 volumes:
   postgres-data:
+

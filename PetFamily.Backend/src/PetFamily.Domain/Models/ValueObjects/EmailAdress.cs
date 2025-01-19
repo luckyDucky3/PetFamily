@@ -2,16 +2,16 @@ using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain.Models.ValueObjects;
 
-public class RequisitesForHelp : ValueObject
+public class EmailAdress : ValueObject
 {
-    public string value { get; }
+    public string Value { get; }
 
-    public RequisitesForHelp(string value)
+    public EmailAdress(string value)
     {
-        value = value;
+        Value = value;
     }
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return value;
+        yield return Value;
     }
 }
