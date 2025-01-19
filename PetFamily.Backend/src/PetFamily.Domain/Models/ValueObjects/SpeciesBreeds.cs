@@ -1,13 +1,14 @@
 using CSharpFunctionalExtensions;
+using PetFamily.Domain.Models.Ids;
 
 namespace PetFamily.Domain.Models.ValueObjects;
 
 public class SpeciesBreeds : ValueObject
 {
-    public Guid SpeciesId { get; }
-    public Guid BreedId { get; }
+    public SpecieId SpeciesId { get; }
+    public BreedId BreedId { get; }
 
-    public SpeciesBreeds(Guid speciesId, Guid breedId)
+    public SpeciesBreeds(SpecieId speciesId, BreedId breedId)
     {
         SpeciesId = speciesId;
         BreedId = breedId;
