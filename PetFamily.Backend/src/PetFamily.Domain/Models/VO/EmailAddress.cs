@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
@@ -25,10 +26,13 @@ public class EmailAddress : ValueObject
     {
         if (string.IsNullOrWhiteSpace(emailAddress))
             return Result.Failure<EmailAddress, Error>(
-                Errors.General.ValueIsInvalid("Email address"));
-        if (!(emailAddress.Contains('@') && emailAddress.Contains('.')))
+                Errors.General.IsNullOrWhitespace("Email address"));
+        
+        Regex regex = new Regex(@"^\S+@\S+\.\S+$");
+        if (!regex.IsMatch(emailAddress))
             return Result.Failure<EmailAddress, Error>(
-                Errors.General.ValueIsInvalid("Email address"));
+                Errors.General.IsInvalid("Email address"));
+        
         return Result.Success<EmailAddress, Error>(new EmailAddress(emailAddress));
     }
 

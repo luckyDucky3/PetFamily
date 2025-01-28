@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
@@ -19,7 +20,13 @@ namespace PetFamily.Domain.Models.VO
         {
             if (string.IsNullOrWhiteSpace(phoneNumber))
                 return Result.Failure<PhoneNumber, Error>(
-                    Errors.General.ValueIsInvalid("Phone number cannot be null or whitespace."));
+                    Errors.General.IsNullOrWhitespace("Phone number"));
+
+            Regex regex = new Regex(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$");
+            if (!regex.IsMatch(phoneNumber))
+                return Result.Failure<PhoneNumber, Error>(
+                    Errors.General.IsInvalid("Phone number"));
+            
             return Result.Success<PhoneNumber, Error>(new PhoneNumber(phoneNumber));
         }
         

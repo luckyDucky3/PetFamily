@@ -22,10 +22,10 @@ public class SocialNetwork : ValueObject
     {
         if (string.IsNullOrWhiteSpace(name))
             return Result.Failure<SocialNetwork, Error>(
-                Errors.General.ValueIsInvalid("Name cannot be null or whitespace."));
+                Errors.General.IsInvalid("Name cannot be null or whitespace."));
         if (string.IsNullOrWhiteSpace(link))
             return Result.Failure<SocialNetwork, Error>(
-                Errors.General.ValueIsInvalid("Link cannot be null or whitespace."));
+                Errors.General.IsInvalid("Link cannot be null or whitespace."));
         return Result.Success<SocialNetwork, Error>(new SocialNetwork(name, link));
     }
 }

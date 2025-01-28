@@ -30,12 +30,15 @@ public class FullName : ValueObject
     {
         if (string.IsNullOrWhiteSpace(firstName))
             return Result.Failure<FullName, Error>(
-                Errors.General.ValueIsInvalid("First name"));
+                Errors.General.IsInvalid("First name"));
+        
         if (string.IsNullOrWhiteSpace(lastName))
             return Result.Failure<FullName, Error>(
-                Errors.General.ValueIsInvalid("Last name"));
+                Errors.General.IsInvalid("Last name"));
+        
         if (string.IsNullOrWhiteSpace(patronymic))
             return Result.Success<FullName, Error>(new FullName(firstName, lastName));
+        
         return Result.Success<FullName, Error>(new FullName(firstName, lastName, patronymic));
     }
 }

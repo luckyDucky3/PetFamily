@@ -22,10 +22,13 @@ public class RequisitesForHelp : ValueObject
     {
         if (string.IsNullOrWhiteSpace(title))
             return Result.Failure<RequisitesForHelp, Error>(
-                Errors.General.ValueIsInvalid("Title cannot be null or whitespace."));
+                Errors.General.IsInvalid("Title"));
+        
         if (string.IsNullOrWhiteSpace(descriptionOfDonation))
             return Result.Failure<RequisitesForHelp, Error>(
-                Errors.General.ValueIsInvalid("Description cannot be null or whitespace."));
-        return Result.Success<RequisitesForHelp, Error>(new RequisitesForHelp(title, descriptionOfDonation));
+                Errors.General.IsInvalid("Description"));
+        
+        return Result.Success<RequisitesForHelp, Error>(
+            new RequisitesForHelp(title, descriptionOfDonation));
     }
 }

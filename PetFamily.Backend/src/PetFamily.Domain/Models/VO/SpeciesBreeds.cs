@@ -24,7 +24,7 @@ public class SpeciesBreeds : ValueObject
     {
         if (speciesId.Value == Guid.Empty || breedId.Value == Guid.Empty)
             return Result.Failure<SpeciesBreeds, Error>(
-                Errors.General.ValueIsRequired("Species and Breed ids"));
+                Errors.General.IsRequired("Species and Breed ids"));
         var resp = new SpeciesBreeds(speciesId, breedId);
         return Result.Success<SpeciesBreeds, Error>(resp);
     }
