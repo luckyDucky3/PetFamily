@@ -12,8 +12,8 @@ public class PetId : ComparableValueObject
         Value = value;
     }
     
-    public static PetId NewPetId => new PetId(Guid.NewGuid());
-    public static PetId Empty => new PetId(Guid.Empty);
+    public static PetId NewPetId() => new PetId(Guid.NewGuid());
+    public static PetId Empty() => new PetId(Guid.Empty);
     public static PetId Create(Guid id) => new PetId(id);
 
 

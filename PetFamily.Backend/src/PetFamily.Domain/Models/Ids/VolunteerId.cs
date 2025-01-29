@@ -11,8 +11,8 @@ public class VolunteerId : ComparableValueObject
         Value = value;
     }
     
-    public static VolunteerId NewPetId => new VolunteerId(Guid.NewGuid());
-    public static VolunteerId Empty => new VolunteerId(Guid.Empty);
+    public static VolunteerId NewVolunteerId() => new VolunteerId(Guid.NewGuid());
+    public static VolunteerId Empty() => new VolunteerId(Guid.Empty);
     public static VolunteerId Create(Guid id) => new VolunteerId(id);
 
 
@@ -21,5 +21,9 @@ public class VolunteerId : ComparableValueObject
         yield return Value;
     }
     
-    public static implicit operator Guid(VolunteerId id) => id.Value;
+    public static implicit operator Guid(VolunteerId volunteerId)
+    {
+        ArgumentNullException.ThrowIfNull(volunteerId);
+        return volunteerId.Value;
+    }
 }

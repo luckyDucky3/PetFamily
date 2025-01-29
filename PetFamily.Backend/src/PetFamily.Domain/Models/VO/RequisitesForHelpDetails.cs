@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 
-namespace PetFamily.Domain.Models.ValueObjects;
+namespace PetFamily.Domain.Models.VO;
 
 public class RequisitesForHelpDetails : ValueObject
 {
@@ -9,5 +9,14 @@ public class RequisitesForHelpDetails : ValueObject
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return ListRequisitesForHelp;
+    }
+    public RequisitesForHelpDetails()
+    {
+    }
+
+    public Result<bool> AddRequisite(RequisitesForHelp requisite)
+    {
+        _requisitesForHelp.Add(requisite);
+        return Result.Success(true);
     }
 }

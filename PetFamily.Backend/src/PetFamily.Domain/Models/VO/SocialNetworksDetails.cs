@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.Models.ValueObjects;
+namespace PetFamily.Domain.Models.VO;
 
 public class SocialNetworksDetails : ValueObject
 {
@@ -17,5 +18,15 @@ public class SocialNetworksDetails : ValueObject
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return SocialNetworks;
+    }
+
+    public Result<bool, Error> AddSocialNetwork(string socialNetworkString, string socialNetworkLink)
+    {
+        var response = SocialNetwork.Create(socialNetworkString, socialNetworkLink);
+        if (response.IsFailure)
+            return Result.Failure<bool, Error>(Errors.General.IsNotFound());
+        var socialNetwork = response.Value;
+        _socialNetworks.Add(socialNetwork);
+        return Result.Success<bool, Error>(true);
     }
 }

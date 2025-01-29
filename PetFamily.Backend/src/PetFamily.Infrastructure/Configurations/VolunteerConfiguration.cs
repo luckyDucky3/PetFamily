@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Models;
 using PetFamily.Domain.Models.Entities;
 using PetFamily.Domain.Models.Ids;
-using PetFamily.Domain.Models.ValueObjects;
+using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.Infrastructure.Configurations;
@@ -15,9 +15,14 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         builder.ToTable("volunteer");
         builder.HasKey(v => v.Id);
         builder.Property(v => v.Id).HasConversion(id => id.Value, value => VolunteerId.Create(value)).IsRequired().HasColumnName("volunteer_id");
+        builder.ComplexProperty(v => v.Name, nb =>
+        {
+            nb.Property(n => n.FirstName).IsRequired().HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH).HasColumnName("first_name");
+            nb.Property(n => n.LastName).IsRequired().HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH).HasColumnName("last_name");
+            nb.Property(n => n.Patronymic).IsRequired(false).HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH).HasColumnName("patronymic");
+        });
         
-        builder.Property(v => v.Name).HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH).HasColumnName("name");
-        builder.Property(v => v.Email).HasConversion(e=>e.Value, v=> new EmailAdress(v)).HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH).HasColumnName("email");
+        builder.Property(v => v.Email).HasConversion(e => e.Value, v=> EmailAddress.CreateWithoutCheck(v)).HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH).HasColumnName("email");
         builder.Property(v => v.Description).IsRequired(false).HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH).HasColumnName("description");
         builder.Property(v => v.ExperienceYears).HasColumnName("experience_years");
         builder.Ignore(v => v.CountOfPetsThatFindHome);
@@ -31,7 +36,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
             vb.OwnsMany(d => d.ListRequisitesForHelp, rb =>
             {
-                rb.Property(r => r.value).IsRequired().HasMaxLength(Constants.MAX_LONG_TEXT_LENGTH);
+                rb.Property(r => r.Title).IsRequired().HasMaxLength(Constants.MAX_LONG_TEXT_LENGTH);
             });
         });
         builder.OwnsOne(v => v.SocialNetworksDetails, vb =>

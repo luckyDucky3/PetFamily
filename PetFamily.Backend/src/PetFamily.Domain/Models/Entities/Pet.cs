@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Enums;
 using PetFamily.Domain.Models.Ids;
-using PetFamily.Domain.Models.ValueObjects;
+using PetFamily.Domain.Models.VO;
 
 namespace PetFamily.Domain.Models.Entities;
 

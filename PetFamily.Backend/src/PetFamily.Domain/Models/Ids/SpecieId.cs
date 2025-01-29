@@ -11,8 +11,8 @@ public class SpecieId : ComparableValueObject
         Value = value;
     }
     
-    public static SpecieId NewPetId => new SpecieId(Guid.NewGuid());
-    public static SpecieId Empty => new SpecieId(Guid.Empty);
+    public static SpecieId NewPetId() => new SpecieId(Guid.NewGuid());
+    public static SpecieId Empty() => new SpecieId(Guid.Empty);
     public static SpecieId Create(Guid id) => new SpecieId(id);
 
 
