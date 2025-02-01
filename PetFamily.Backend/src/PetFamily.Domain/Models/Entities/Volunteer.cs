@@ -22,8 +22,14 @@ public sealed class Volunteer : Entity<VolunteerId>
     public int CountOfPetsThatSick => Pets.Count(p => p.Status == Status.Sick);
     public PhoneNumber? PhoneNumber { get; private set; }
     
-    public SocialNetworksDetails? SocialNetworksDetails { get; private set; }
-    public RequisitesForHelpDetails? RequisitesForHelpDetails { get; private set; }
+    //public SocialNetworksDetails? SocialNetworksDetails { get; private set; }
+    //public RequisitesForHelpDetails? RequisitesForHelpDetails { get; private set; }
+    private readonly List<SocialNetwork> _socialNetworks = [];
+    public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
+    
+    private readonly List<RequisitesForHelp> _requisitesForHelp = [];
+    public IReadOnlyList<RequisitesForHelp> RequisitesForHelp => _requisitesForHelp;
+    
     private readonly List<Pet> _pets = [];
     public IReadOnlyList<Pet> Pets => _pets;
     

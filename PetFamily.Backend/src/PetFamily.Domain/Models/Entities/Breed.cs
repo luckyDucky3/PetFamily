@@ -10,13 +10,13 @@ public class Breed : Entity<BreedId>
     {
     }
 
-    public Breed(BreedId breedId, string breedName, SpecieId specieId)
+    public Breed(BreedId breedId, string breedName)
     {
         Id = breedId;
         BreedName = breedName;
-        SpeciesId = specieId;
+        //SpecieId = specieId;
     }
     public string BreedName { get; private set; } = null!;
-    public SpecieId SpeciesId { get; private set; }
+    // public SpecieId SpecieId { get; private set; }
     public Species Specie {get; private set;}
 }

@@ -33,7 +33,7 @@ public class Pet : Entity<PetId>
     public string PhoneNumber { get; private set; } = null!;
     public bool IsCastrate { get; private set; }
     public bool IsVaccinate { get; private set; }
-    public DateTime? BirthDate { get; private set; }
+    public DateTime BirthDate { get; private set; } = default;
     public Status Status { get; private set; }
-    public DateTime CreatedOn { get; private set; } = default!;
+    public DateTime CreatedOn { get; private set; } = default;
 }

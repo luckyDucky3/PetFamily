@@ -12,8 +12,15 @@ public class SpeciesConfiguration : IEntityTypeConfiguration<Species>
     {
         builder.ToTable("species");
         builder.HasKey(s => s.Id);
-        builder.Property(s => s.Id).HasConversion(s => s.Value, v => SpecieId.Create(v));
-        builder.HasMany(s => s.Breeds).WithOne().HasForeignKey(b=>b.SpeciesId).OnDelete(DeleteBehavior.NoAction);
-        builder.Property(s => s.SpecieName).IsRequired().HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH).HasColumnName("specie_name");
+        
+        builder.Property(s => s.Id)
+            .HasConversion(
+                s => s.Value, 
+                v => SpecieId.Create(v));
+        
+        builder.Property(s => s.SpecieName)
+            .IsRequired()
+            .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH)
+            .HasColumnName("specie_name");
     }
 }
