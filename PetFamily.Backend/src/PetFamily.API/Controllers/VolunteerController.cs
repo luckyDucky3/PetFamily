@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PetFamily.API.Extensions;
 using PetFamily.Application.Volunteers.CreateVolunteers;
 using PetFamily.Domain.Shared;
 
@@ -16,7 +17,7 @@ public class VolunteerController : ControllerBase
     {
         var result = await createVolunteerHandler.Handle(createVolunteerRequest, cancellationToken);
         if (result.IsFailure)
-            return BadRequest(result.Error);
+            return result.Error.ToResponse();
         return Ok(result.Value);
     }
 }

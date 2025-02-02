@@ -8,13 +8,18 @@ namespace PetFamily.Domain.Models.VO
     {
         public string Value { get; }
 
-        public PhoneNumber(string value)
+        private PhoneNumber(string value)
         {
             Value = value;
         }
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;
+        }
+        //метод для HasConversion
+        public static PhoneNumber CreateWithoutCheck(string number)
+        {
+            return new PhoneNumber(number);
         }
         public static Result<PhoneNumber, Error> Create(string phoneNumber)
         {

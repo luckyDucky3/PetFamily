@@ -31,7 +31,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 .IsRequired().HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH)
                 .HasColumnName("last_name");
             nb.Property(n => n.Patronymic)
-                .IsRequired(false)
+                .IsRequired()
                 .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH)
                 .HasColumnName("patronymic");
         });
@@ -39,12 +39,12 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         builder.Property(v => v.Email).HasConversion(
             e => e!.Value, 
             v=> EmailAddress.CreateWithoutCheck(v))
-            .IsRequired(false)
+            .IsRequired()
             .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH)
             .HasColumnName("email_address");
         
         builder.Property(v => v.Description)
-            .IsRequired(false)
+            .IsRequired()
             .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH)
             .HasColumnName("description");
         
@@ -59,8 +59,8 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         
         builder.Property(v => v.PhoneNumber)
             .HasConversion(
-                p=>p!.Value,
-                v=>new PhoneNumber(v))
+                p => p!.Value,
+                v => PhoneNumber.CreateWithoutCheck(v))
             .IsRequired()
             .HasColumnName("phone_number");
 

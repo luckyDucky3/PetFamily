@@ -3,7 +3,7 @@ using PetFamily.Domain.Models.Ids;
 
 namespace PetFamily.Domain.Models.Entities;
 
-public class Species : Entity<SpecieId>
+public sealed class Species : Entity<SpecieId>
 {
     private readonly List<Breed> _breeds = [];
     //EF

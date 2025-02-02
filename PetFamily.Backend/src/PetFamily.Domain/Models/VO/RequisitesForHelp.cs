@@ -3,7 +3,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.VO;
 
-public class RequisitesForHelp : ValueObject
+public sealed class RequisitesForHelp : ValueObject
 {
     public string Title { get; }
     public string DescriptionOfDonation { get; }

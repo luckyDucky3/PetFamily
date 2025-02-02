@@ -4,7 +4,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.VO;
 
-public class EmailAddress : ValueObject
+public sealed class EmailAddress : ValueObject
 {
     public string Value { get; }
 
