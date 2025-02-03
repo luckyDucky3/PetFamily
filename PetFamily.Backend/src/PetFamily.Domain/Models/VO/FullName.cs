@@ -23,7 +23,6 @@ public sealed class FullName : ValueObject
     {
         yield return FirstName;
         yield return LastName;
-        yield return Patronymic;
     }
 
     public static Result<FullName, Error> Create(string firstName, string lastName, string? patronymic = null)

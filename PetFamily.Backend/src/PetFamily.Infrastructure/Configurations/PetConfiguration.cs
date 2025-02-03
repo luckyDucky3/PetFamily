@@ -35,6 +35,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .HasColumnName("description");
         
         builder.Property(p => p.Color)
+            .HasConversion(new EnumToStringConverter<Color>())
             .IsRequired()
             .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH)
             .HasColumnName("color");

@@ -6,9 +6,9 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Infrastructure.Configurations;
 
-public class SpeciesConfiguration : IEntityTypeConfiguration<Species>
+public class SpeciesConfiguration : IEntityTypeConfiguration<Specie>
 {
-    public void Configure(EntityTypeBuilder<Species> builder)
+    public void Configure(EntityTypeBuilder<Specie> builder)
     {
         builder.ToTable("species");
         builder.HasKey(s => s.Id);

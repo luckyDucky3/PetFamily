@@ -18,6 +18,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseHttpsRedirection();
+
+app.UseRouting();
+app.MapControllers();
+//app.UseHttpsRedirection();
 
 app.Run();

@@ -15,7 +15,7 @@ public sealed class Pet : Entity<PetId>
 
     public Pet(
         PetId petId, string name, string description, SpeciesBreeds speciesBreeds, 
-        string color, Address address, string infoAboutHealth,
+        Color color, Address address, string infoAboutHealth,
         double? weight, double? height, PhoneNumber phoneNumber, 
         bool isCastrate, bool isVaccinate, DateTime birthDate, Status status)
     {
@@ -39,7 +39,7 @@ public sealed class Pet : Entity<PetId>
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public SpeciesBreeds SpeciesBreeds { get; private set; } = null!;
-    public string Color { get; private set; } = null!;
+    public Color Color { get; private set; }
     public Address Address { get; private set; } = null!;
     public string InfoAboutHealth { get; private set; } = null!;
     public double? Weight { get; private set; }
@@ -53,7 +53,7 @@ public sealed class Pet : Entity<PetId>
 
     public Result<Pet, Error> Create(
         PetId petId, string name, string description, SpeciesBreeds speciesBreeds,
-        string color, Address address, string infoAboutHealth, double? weight,
+        Color color, Address address, string infoAboutHealth, double? weight,
         double? height, PhoneNumber phoneNumber, bool isCastrate, 
         bool isVaccinate, DateTime birthDate, Status status)
     {

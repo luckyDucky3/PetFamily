@@ -22,8 +22,6 @@ public sealed class Volunteer : Entity<VolunteerId>
     public int CountOfPetsThatSick => Pets.Count(p => p.Status == Status.Sick);
     public PhoneNumber PhoneNumber { get; private set; } = null!;
     
-    //public SocialNetworksDetails? SocialNetworksDetails { get; private set; }
-    //public RequisitesForHelpDetails? RequisitesForHelpDetails { get; private set; }
     private readonly List<SocialNetwork> _socialNetworks = [];
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
     
@@ -34,11 +32,11 @@ public sealed class Volunteer : Entity<VolunteerId>
     public IReadOnlyList<Pet> Pets => _pets;
     
     public static Result<Volunteer, Error> Create(
-        VolunteerId id, FullName fullName, EmailAddress emailAdress, 
+        VolunteerId id, FullName fullName, EmailAddress emailAddress, 
         string description, PhoneNumber phoneNumber, int experienceYears)
     {
         Volunteer volunteer = new Volunteer(
-            id, fullName, experienceYears, phoneNumber, description, emailAdress);
+            id, fullName, experienceYears, phoneNumber, description, emailAddress);
         
         return Result.Success<Volunteer, Error>(volunteer);
     }
