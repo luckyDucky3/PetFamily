@@ -12,7 +12,7 @@ public class ApplicatonDbContext(IConfiguration configuration) : DbContext
     private const string DATABASE = "Database";
     
     public DbSet<Volunteer> Volunteers {get; set;}
-    public DbSet<Species> Species {get; set;}
+    public DbSet<Specie> Species {get; set;}
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(configuration.GetConnectionString(DATABASE));

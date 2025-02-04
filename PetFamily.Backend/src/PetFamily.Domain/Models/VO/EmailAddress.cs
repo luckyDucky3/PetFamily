@@ -4,7 +4,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.VO;
 
-public class EmailAddress : ValueObject
+public sealed class EmailAddress : ValueObject
 {
     public string Value { get; }
 
@@ -26,7 +26,7 @@ public class EmailAddress : ValueObject
     {
         if (string.IsNullOrWhiteSpace(emailAddress))
             return Result.Failure<EmailAddress, Error>(
-                Errors.General.IsNullOrWhitespace("Email address"));
+                Errors.General.IsRequired("Email address"));
         
         Regex regex = new Regex(@"^\S+@\S+\.\S+$");
         if (!regex.IsMatch(emailAddress))

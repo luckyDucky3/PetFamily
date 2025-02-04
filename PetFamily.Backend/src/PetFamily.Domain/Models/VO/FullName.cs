@@ -3,7 +3,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.VO;
 
-public class FullName : ValueObject
+public sealed class FullName : ValueObject
 {
     public string FirstName { get; }
     public string LastName { get; }
@@ -23,7 +23,6 @@ public class FullName : ValueObject
     {
         yield return FirstName;
         yield return LastName;
-        yield return Patronymic;
     }
 
     public static Result<FullName, Error> Create(string firstName, string lastName, string? patronymic = null)

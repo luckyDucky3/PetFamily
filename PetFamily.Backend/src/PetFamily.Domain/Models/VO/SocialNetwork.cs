@@ -3,7 +3,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.VO;
 
-public class SocialNetwork : ValueObject
+public sealed class SocialNetwork : ValueObject
 {
     public string Name { get; }
     public string Link { get; }

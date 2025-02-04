@@ -21,16 +21,11 @@ public class Errors
             var label = name ?? "value";
             return Error.Validation("length.is.invalid", $"{label} is invalid length");
         }
+
         public static Error IsRequired(string? name = null)
         {
             var label = name ?? "value";
-            return Error.Validation("value.is.required", $"{name} is required");
-        }
-
-        public static Error IsNullOrWhitespace(string? name = null)
-        {
-            var label = name ?? "value";
-            return Error.Validation("value.is.null.or.whitespace", $"{label} is null or whitespace");
+            return Error.Validation("value.is.required", $"{label} is required");
         }
     }
 }

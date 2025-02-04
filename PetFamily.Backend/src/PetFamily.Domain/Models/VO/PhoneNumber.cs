@@ -8,7 +8,7 @@ namespace PetFamily.Domain.Models.VO
     {
         public string Value { get; }
 
-        public PhoneNumber(string value)
+        private PhoneNumber(string value)
         {
             Value = value;
         }
@@ -16,11 +16,16 @@ namespace PetFamily.Domain.Models.VO
         {
             yield return Value;
         }
+        //метод для HasConversion
+        public static PhoneNumber CreateWithoutCheck(string number)
+        {
+            return new PhoneNumber(number);
+        }
         public static Result<PhoneNumber, Error> Create(string phoneNumber)
         {
             if (string.IsNullOrWhiteSpace(phoneNumber))
                 return Result.Failure<PhoneNumber, Error>(
-                    Errors.General.IsNullOrWhitespace("Phone number"));
+                    Errors.General.IsRequired("Phone number"));
 
             Regex regex = new Regex(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$");
             if (!regex.IsMatch(phoneNumber))

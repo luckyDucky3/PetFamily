@@ -13,38 +13,48 @@ public sealed class Volunteer : Entity<VolunteerId>
     {
     }
 
-    public FullName Name { get; private set; }
-    public EmailAddress? Email { get; private set; }
-    public string? Description { get; private set; }
+    public FullName Name { get; private set; } = null!;
+    public EmailAddress Email { get; private set; } = null!;
+    public string Description { get; private set; } = null!;
     public int ExperienceYears { get; private set; }
     public int CountOfPetsThatFindHome => Pets.Count(p => p.Status == Status.FindHome);
     public int CountOfPetsThatSearchHome => Pets.Count(p => p.Status == Status.SearchHome);
     public int CountOfPetsThatSick => Pets.Count(p => p.Status == Status.Sick);
-    public PhoneNumber? PhoneNumber { get; private set; }
+    public PhoneNumber PhoneNumber { get; private set; } = null!;
     
-    public SocialNetworksDetails? SocialNetworksDetails { get; private set; }
-    public RequisitesForHelpDetails? RequisitesForHelpDetails { get; private set; }
+    private readonly List<SocialNetwork> _socialNetworks = [];
+    public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
+    
+    private readonly List<RequisitesForHelp> _requisitesForHelp = [];
+    public IReadOnlyList<RequisitesForHelp> RequisitesForHelp => _requisitesForHelp;
+    
     private readonly List<Pet> _pets = [];
     public IReadOnlyList<Pet> Pets => _pets;
     
-    public static Result<Volunteer, Error> Create(VolunteerId id, FullName fullName, EmailAddress? emailAdress = null, 
-        string? description = null, PhoneNumber? phoneNumber = null, int experienceYears = 0)
+    public static Result<Volunteer, Error> Create(
+        VolunteerId id, FullName fullName, EmailAddress emailAddress, 
+        string description, PhoneNumber phoneNumber, int experienceYears)
     {
-        Volunteer volunteer = new Volunteer(id, fullName, experienceYears, phoneNumber,
-            description, emailAdress);
+        Volunteer volunteer = new Volunteer(
+            id, fullName, experienceYears, phoneNumber, description, emailAddress);
+        
         return Result.Success<Volunteer, Error>(volunteer);
     }
-    private Volunteer(VolunteerId id, FullName fullName, int experienceYears)
+    private Volunteer(
+        VolunteerId id, FullName fullName, int experienceYears, 
+        PhoneNumber phoneNumber, string description, EmailAddress emailAddress)
     {
         Id = id;
         Name = fullName;
         ExperienceYears = experienceYears;
-    }
-    private Volunteer(VolunteerId id, FullName fullName, int experienceYears, PhoneNumber? phoneNumber,
-        string? description, EmailAddress? emailAdress) : this(id, fullName, experienceYears)
-    {
-        Email = emailAdress;
+        Email = emailAddress;
         Description = description;
         PhoneNumber = phoneNumber;
     }
+
+    public void CreateSocialNetworks(List<SocialNetwork> socialNetworks) 
+        => _socialNetworks.AddRange(socialNetworks);
+
+    public void CreateRequisitesForHelp(List<RequisitesForHelp> requisitesForHelp) 
+        => _requisitesForHelp.AddRange(requisitesForHelp);
 }
