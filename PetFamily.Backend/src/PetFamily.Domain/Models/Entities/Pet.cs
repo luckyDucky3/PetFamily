@@ -57,6 +57,24 @@ public sealed class Pet : Entity<PetId>
         double? height, PhoneNumber phoneNumber, bool isCastrate, 
         bool isVaccinate, DateTime birthDate, Status status)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            return Result.Failure<Pet, Error>(Errors.General.IsRequired("Name"));
+        
+        if (string.IsNullOrWhiteSpace(description))
+            return Result.Failure<Pet, Error>(Errors.General.IsRequired("Description"));
+        
+        if (string.IsNullOrWhiteSpace(infoAboutHealth))
+            return Result.Failure<Pet, Error>(Errors.General.IsRequired("Info about health"));
+        
+        if (weight < 0)
+            return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Weight"));
+        
+        if (height < 0)
+            return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Height"));
+        
+        if (BirthDate < DateTime.MinValue || BirthDate > DateTime.Now)
+            return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Birthdate"));
+        
         Pet pet = new Pet(petId, name, description, speciesBreeds, 
             color, address, infoAboutHealth, weight, 
             height, phoneNumber, isCastrate, isVaccinate, 

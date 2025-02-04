@@ -11,8 +11,8 @@ public record CreateVolunteerCommand
     public string PhoneNumber { get; }
     public string EmailAddress { get; } 
     public int ExperienceYears { get; }
-    public List<SocialNetworkDTO> SocialNetworks { get; }
-    public List<RequisitesForHelpDTO> RequisitesForHelp { get; }
+    public List<SocialNetworkDto> SocialNetworks { get; }
+    public List<RequisitesForHelpDto> RequisitesForHelp { get; }
 
     public CreateVolunteerCommand(CreateVolunteerRequest createVolunteerRequest)
     {
@@ -24,10 +24,10 @@ public record CreateVolunteerCommand
         EmailAddress = createVolunteerRequest.EmailAddress;
         ExperienceYears = createVolunteerRequest.ExperienceYears;
         SocialNetworks = createVolunteerRequest.SocialNetworks != null ? 
-            new List<SocialNetworkDTO>(createVolunteerRequest.SocialNetworks) 
-            : new List<SocialNetworkDTO>();
+            new List<SocialNetworkDto>(createVolunteerRequest.SocialNetworks) 
+            : new List<SocialNetworkDto>();
         RequisitesForHelp = createVolunteerRequest.RequisitesForHelp != null ?
-            new List<RequisitesForHelpDTO>(createVolunteerRequest.RequisitesForHelp)
-            : new List<RequisitesForHelpDTO>();
+            new List<RequisitesForHelpDto>(createVolunteerRequest.RequisitesForHelp)
+            : new List<RequisitesForHelpDto>();
     }
 }

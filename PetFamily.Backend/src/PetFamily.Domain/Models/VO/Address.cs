@@ -32,16 +32,16 @@ public class Address : ValueObject
     public static Result<Address, Error> Create(string state, string city, string street, string homeNumber)
     {
         if (string.IsNullOrWhiteSpace(state))
-            return Result.Failure<Address, Error>(Errors.General.IsNullOrWhitespace("State"));
+            return Result.Failure<Address, Error>(Errors.General.IsRequired("State"));
         
         if (string.IsNullOrWhiteSpace(city))
-            return Result.Failure<Address, Error>(Errors.General.IsNullOrWhitespace("City"));
+            return Result.Failure<Address, Error>(Errors.General.IsRequired("City"));
         
         if (string.IsNullOrWhiteSpace(street))
-            return Result.Failure<Address, Error>(Errors.General.IsNullOrWhitespace("Street"));
+            return Result.Failure<Address, Error>(Errors.General.IsRequired("Street"));
         
         if (string.IsNullOrWhiteSpace(homeNumber))
-            return Result.Failure<Address, Error>(Errors.General.IsNullOrWhitespace("HomeNumber"));
+            return Result.Failure<Address, Error>(Errors.General.IsRequired("HomeNumber"));
         
         return new Address(state, city, street, homeNumber);
     }

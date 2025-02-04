@@ -22,7 +22,7 @@ public sealed class Breed : Entity<BreedId>
     public static Result<Breed, Error> Create(BreedId breedId, string breedName)
     {
         if (string.IsNullOrWhiteSpace(breedName))
-            return Result.Failure<Breed, Error>(Errors.General.IsNullOrWhitespace("Breed name"));
+            return Result.Failure<Breed, Error>(Errors.General.IsRequired("Breed name"));
         Breed breed = new Breed(breedId, breedName);
         return Result.Success<Breed, Error>(breed);
     }

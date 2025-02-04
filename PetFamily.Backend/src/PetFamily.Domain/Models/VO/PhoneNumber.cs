@@ -25,7 +25,7 @@ namespace PetFamily.Domain.Models.VO
         {
             if (string.IsNullOrWhiteSpace(phoneNumber))
                 return Result.Failure<PhoneNumber, Error>(
-                    Errors.General.IsNullOrWhitespace("Phone number"));
+                    Errors.General.IsRequired("Phone number"));
 
             Regex regex = new Regex(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$");
             if (!regex.IsMatch(phoneNumber))

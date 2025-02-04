@@ -26,7 +26,7 @@ public sealed class EmailAddress : ValueObject
     {
         if (string.IsNullOrWhiteSpace(emailAddress))
             return Result.Failure<EmailAddress, Error>(
-                Errors.General.IsNullOrWhitespace("Email address"));
+                Errors.General.IsRequired("Email address"));
         
         Regex regex = new Regex(@"^\S+@\S+\.\S+$");
         if (!regex.IsMatch(emailAddress))

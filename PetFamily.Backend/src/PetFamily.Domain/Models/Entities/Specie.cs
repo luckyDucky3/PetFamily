@@ -24,7 +24,7 @@ public sealed class Specie : Entity<SpecieId>
     public static Result<Specie, Error> Create(SpecieId specieId, string specieName)
     {
         if (string.IsNullOrWhiteSpace(specieName))
-            return Result.Failure<Specie, Error>(Errors.General.IsNullOrWhitespace("Specie name"));
+            return Result.Failure<Specie, Error>(Errors.General.IsRequired("Specie name"));
         
         Specie specie = new Specie(specieId, specieName);
         return Result.Success<Specie, Error>(specie);
