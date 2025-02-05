@@ -4,7 +4,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.VO;
 
-public class SpeciesBreeds : ValueObject
+public sealed class SpeciesBreeds : ValueObject
 {
     public SpecieId SpeciesId { get; }
     public BreedId BreedId { get; }

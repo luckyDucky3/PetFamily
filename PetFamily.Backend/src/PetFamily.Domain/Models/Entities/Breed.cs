@@ -1,22 +1,29 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Models.Ids;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.Entities;
 
-public class Breed : Entity<BreedId>
+public sealed class Breed : Entity<BreedId>
 {
     //EF
     private Breed()
     {
     }
 
-    public Breed(BreedId breedId, string breedName, SpecieId specieId)
+    private Breed(BreedId breedId, string breedName)
     {
         Id = breedId;
         BreedName = breedName;
-        SpeciesId = specieId;
     }
     public string BreedName { get; private set; } = null!;
-    public SpecieId SpeciesId { get; private set; }
-    public Species Specie {get; private set;}
+    public Specie Specie {get; private set;} = null!;
+
+    public static Result<Breed, Error> Create(BreedId breedId, string breedName)
+    {
+        if (string.IsNullOrWhiteSpace(breedName))
+            return Result.Failure<Breed, Error>(Errors.General.IsRequired("Breed name"));
+        Breed breed = new Breed(breedId, breedName);
+        return Result.Success<Breed, Error>(breed);
+    }
 }
