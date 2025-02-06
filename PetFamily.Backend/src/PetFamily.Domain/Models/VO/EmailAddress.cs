@@ -12,27 +12,29 @@ public sealed class EmailAddress : ValueObject
     {
         Value = value;
     }
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
     }
+
     //метод для HasConversion
     public static EmailAddress CreateWithoutCheck(string emailAddress)
     {
         return new EmailAddress(emailAddress);
     }
-    
+
     public static Result<EmailAddress, Error> Create(string emailAddress)
     {
         if (string.IsNullOrWhiteSpace(emailAddress))
             return Result.Failure<EmailAddress, Error>(
                 Errors.General.IsRequired("Email address"));
-        
+
         Regex regex = new Regex(@"^\S+@\S+\.\S+$");
         if (!regex.IsMatch(emailAddress))
             return Result.Failure<EmailAddress, Error>(
                 Errors.General.IsInvalid("Email address"));
-        
+
         return Result.Success<EmailAddress, Error>(new EmailAddress(emailAddress));
     }
 

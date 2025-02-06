@@ -2,14 +2,12 @@ using CSharpFunctionalExtensions;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.Models.Entities;
+namespace PetFamily.Domain.Models.Entities.Specie;
 
 public sealed class Breed : Entity<BreedId>
 {
     //EF
-    private Breed()
-    {
-    }
+    private Breed(BreedId id) : base(id) {}
 
     private Breed(BreedId breedId, string breedName)
     {

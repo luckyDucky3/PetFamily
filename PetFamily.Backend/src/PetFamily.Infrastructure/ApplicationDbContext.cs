@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetFamily.Domain.Models;
 using PetFamily.Domain.Models.Entities;
+using PetFamily.Domain.Models.Entities.Specie;
+using PetFamily.Domain.Models.Entities.Volunteer;
 
 namespace PetFamily.Infrastructure;
 

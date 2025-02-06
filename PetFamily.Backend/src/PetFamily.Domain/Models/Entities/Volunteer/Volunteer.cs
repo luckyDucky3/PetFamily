@@ -4,14 +4,12 @@ using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.Models.Entities;
+namespace PetFamily.Domain.Models.Entities.Volunteer;
 
 public sealed class Volunteer : Entity<VolunteerId>
 {
     //EF
-    private Volunteer()
-    {
-    }
+    private Volunteer(VolunteerId id) : base(id) {}
 
     public FullName Name { get; private set; } = null!;
     public EmailAddress Email { get; private set; } = null!;
@@ -21,27 +19,28 @@ public sealed class Volunteer : Entity<VolunteerId>
     public int CountOfPetsThatSearchHome => Pets.Count(p => p.Status == Status.SearchHome);
     public int CountOfPetsThatSick => Pets.Count(p => p.Status == Status.Sick);
     public PhoneNumber PhoneNumber { get; private set; } = null!;
-    
+
     private readonly List<SocialNetwork> _socialNetworks = [];
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
-    
+
     private readonly List<RequisitesForHelp> _requisitesForHelp = [];
     public IReadOnlyList<RequisitesForHelp> RequisitesForHelp => _requisitesForHelp;
-    
+
     private readonly List<Pet> _pets = [];
     public IReadOnlyList<Pet> Pets => _pets;
-    
+
     public static Result<Volunteer, Error> Create(
-        VolunteerId id, FullName fullName, EmailAddress emailAddress, 
+        VolunteerId id, FullName fullName, EmailAddress emailAddress,
         string description, PhoneNumber phoneNumber, int experienceYears)
     {
         Volunteer volunteer = new Volunteer(
             id, fullName, experienceYears, phoneNumber, description, emailAddress);
-        
+
         return Result.Success<Volunteer, Error>(volunteer);
     }
+
     private Volunteer(
-        VolunteerId id, FullName fullName, int experienceYears, 
+        VolunteerId id, FullName fullName, int experienceYears,
         PhoneNumber phoneNumber, string description, EmailAddress emailAddress)
     {
         Id = id;
@@ -52,9 +51,9 @@ public sealed class Volunteer : Entity<VolunteerId>
         PhoneNumber = phoneNumber;
     }
 
-    public void CreateSocialNetworks(List<SocialNetwork> socialNetworks) 
+    public void CreateSocialNetworks(List<SocialNetwork> socialNetworks)
         => _socialNetworks.AddRange(socialNetworks);
 
-    public void CreateRequisitesForHelp(List<RequisitesForHelp> requisitesForHelp) 
+    public void CreateRequisitesForHelp(List<RequisitesForHelp> requisitesForHelp)
         => _requisitesForHelp.AddRange(requisitesForHelp);
 }

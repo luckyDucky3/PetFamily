@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Models.Entities;
+using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 
