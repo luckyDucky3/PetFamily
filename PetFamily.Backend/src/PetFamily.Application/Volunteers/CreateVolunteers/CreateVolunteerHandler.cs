@@ -29,9 +29,9 @@ public class CreateVolunteerHandler
         var description = createVolunteerCommand.Description;
 
         var fullNameResult = FullName.Create(
-            createVolunteerCommand.FirstName,
-            createVolunteerCommand.LastName,
-            createVolunteerCommand.Patronymic).Value;
+            createVolunteerCommand.FullName.FirstName,
+            createVolunteerCommand.FullName.LastName,
+            createVolunteerCommand.FullName.Patronymic).Value;
 
         var phoneNumber = PhoneNumber.Create(
             createVolunteerCommand.PhoneNumber).Value;

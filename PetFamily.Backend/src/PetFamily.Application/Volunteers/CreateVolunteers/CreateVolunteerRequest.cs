@@ -5,9 +5,7 @@ using PetFamily.Domain.Models.VO;
 namespace PetFamily.Application.Volunteers.CreateVolunteers;
 
 public record CreateVolunteerRequest(
-    string FirstName,
-    string LastName,
-    string? Patronymic,
+    FullNameDto FullName,
     string Description,
     string PhoneNumber,
     string EmailAddress,

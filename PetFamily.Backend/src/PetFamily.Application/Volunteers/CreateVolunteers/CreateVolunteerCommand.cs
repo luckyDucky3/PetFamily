@@ -1,12 +1,11 @@
 using PetFamily.Application.Volunteers.Dto;
+using PetFamily.Domain.Models.VO;
 
 namespace PetFamily.Application.Volunteers.CreateVolunteers;
 
 public record CreateVolunteerCommand
 {
-    public string FirstName { get; }
-    public string LastName { get; }
-    public string? Patronymic { get; }
+    public FullNameDto FullName { get; }
     public string Description { get; }
     public string PhoneNumber { get; }
     public string EmailAddress { get; }
@@ -16,9 +15,7 @@ public record CreateVolunteerCommand
 
     public CreateVolunteerCommand(CreateVolunteerRequest createVolunteerRequest)
     {
-        FirstName = createVolunteerRequest.FirstName;
-        LastName = createVolunteerRequest.LastName;
-        Patronymic = createVolunteerRequest.Patronymic;
+        FullName = createVolunteerRequest.FullName;
         Description = createVolunteerRequest.Description;
         PhoneNumber = createVolunteerRequest.PhoneNumber;
         EmailAddress = createVolunteerRequest.EmailAddress;
