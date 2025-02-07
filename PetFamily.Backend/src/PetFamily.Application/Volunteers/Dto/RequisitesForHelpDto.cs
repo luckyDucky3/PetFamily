@@ -1,3 +1,3 @@
-namespace PetFamily.Application.Volunteers.DTO;
+namespace PetFamily.Application.Volunteers.Dto;
 
 public record RequisitesForHelpDto(string Title, string Description);

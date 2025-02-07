@@ -4,14 +4,12 @@ using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.Models.Entities;
+namespace PetFamily.Domain.Models.Entities.Volunteer;
 
 public sealed class Pet : Entity<PetId>
 {
     //EF
-    private Pet()
-    {
-    }
+    private Pet(PetId id) : base(id) {}
 
     public Pet(
         PetId petId, string name, string description, SpeciesBreeds speciesBreeds, 
