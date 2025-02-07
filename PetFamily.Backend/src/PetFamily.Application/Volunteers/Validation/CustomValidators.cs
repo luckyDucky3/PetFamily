@@ -20,17 +20,9 @@ public static class CustomValidators
         });
     }
     
-    public static IRuleBuilderOptionsConditions<T, TElement> WithError<T, TElement>(
-        this IRuleBuilder<T, TElement> ruleBuilder,
-        Func<TElement, Result<TElement, Error>> factoryMethod)
+    public static IRuleBuilderOptions<T, TElement> WithError<T, TElement>(
+        this IRuleBuilderOptions<T, TElement> ruleBuilder, Error error)
     {
-        return ruleBuilder.Custom((value, context) =>
-        {
-            var result = factoryMethod(value);
-            if (result.IsSuccess)
-                return;
-            
-            context.AddFailure(result.Error.Serialize());
-        });
+        return ruleBuilder.WithMessage(error.Serialize());
     }
 }

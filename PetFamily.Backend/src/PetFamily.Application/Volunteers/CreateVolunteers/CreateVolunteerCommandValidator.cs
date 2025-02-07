@@ -18,9 +18,11 @@ public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteer
 
         RuleFor(v => v.PhoneNumber).MustBeValueObject(PhoneNumber.Create);
 
-        RuleFor(v => v.Description).WithError(Volunteer.DescriptionValidation);
-        
-        RuleFor(v => v.ExperienceYears).WithError(Volunteer.ExperienceYearsValidation);
+        RuleFor(v => v.Description).MaximumLength(Constants.MAX_LONG_TEXT_LENGTH)
+            .WithError(Errors.General.IsInvalid("Description"));
+
+        RuleFor(v => v.ExperienceYears).Must(y => y >= 0 && y < Constants.MAX_EXP_YEARS)
+            .WithError(Errors.General.IsInvalid("Experience years"));
 
         RuleForEach(v => v.RequisitesForHelp).MustBeValueObject(r => RequisitesForHelp.Create(r.Title, r.Description));
 
