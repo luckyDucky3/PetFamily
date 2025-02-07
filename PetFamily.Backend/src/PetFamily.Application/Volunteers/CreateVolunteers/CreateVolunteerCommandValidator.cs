@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using PetFamily.Application.Volunteers.Validation;
+using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
@@ -17,9 +18,9 @@ public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteer
 
         RuleFor(v => v.PhoneNumber).MustBeValueObject(PhoneNumber.Create);
 
-        RuleFor(v => v.Description).WithError(CreateVolunteerHandler.DescriptionValidation);
+        RuleFor(v => v.Description).WithError(Volunteer.DescriptionValidation);
         
-        RuleFor(v => v.ExperienceYears).WithError(CreateVolunteerHandler.ExperienceYearsValidation);
+        RuleFor(v => v.ExperienceYears).WithError(Volunteer.ExperienceYearsValidation);
 
         RuleForEach(v => v.RequisitesForHelp).MustBeValueObject(r => RequisitesForHelp.Create(r.Title, r.Description));
 

@@ -69,18 +69,4 @@ public class CreateVolunteerHandler
         return Result.Success<Guid, Error>(vId);
         
     }
-    
-    public static Result<int, Error> ExperienceYearsValidation(int years)
-    {
-        if (years < 0 || years > Constants.MAX_EXP_YEARS)
-            return Result.Failure<int, Error>(Errors.General.IsInvalid("Experience years"));
-        return Result.Success<int, Error>(years);
-    }
-
-    public static Result<string, Error> DescriptionValidation(string description)
-    {
-        if (description.Length > Constants.MAX_LONG_TEXT_LENGTH)
-            return Result.Failure<string, Error>(Errors.General.IsInvalidLength("Description"));
-        return Result.Success<string, Error>(description);
-    }
 }
