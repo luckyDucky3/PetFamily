@@ -16,7 +16,21 @@ public static class CustomValidators
             if (result.IsSuccess)
                 return;
 
-            context.AddFailure(result.Error.Message);
+            context.AddFailure(result.Error.Serialize());
+        });
+    }
+    
+    public static IRuleBuilderOptionsConditions<T, TElement> WithError<T, TElement>(
+        this IRuleBuilder<T, TElement> ruleBuilder,
+        Func<TElement, Result<TElement, Error>> factoryMethod)
+    {
+        return ruleBuilder.Custom((value, context) =>
+        {
+            var result = factoryMethod(value);
+            if (result.IsSuccess)
+                return;
+            
+            context.AddFailure(result.Error.Serialize());
         });
     }
 }

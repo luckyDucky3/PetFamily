@@ -6,9 +6,9 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.CreateVolunteers;
 
-public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteerCommand>
+public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteerCommand>
 {
-    public CreateVolunteerRequestValidator()
+    public CreateVolunteerCommandValidator()
     {
         RuleFor(v => new { v.FirstName, v.LastName, v.Patronymic })
             .MustBeValueObject(n => FullName.Create(n.FirstName, n.LastName, n.Patronymic));
@@ -17,9 +17,9 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
 
         RuleFor(v => v.PhoneNumber).MustBeValueObject(PhoneNumber.Create);
 
-        RuleFor(v => v.Description).NotNull().MaximumLength(Constants.MAX_LONG_TEXT_LENGTH);
-
-        RuleFor(v => v.ExperienceYears).NotNull().Must(v => v < Constants.MAX_EXP_YEARS);
+        RuleFor(v => v.Description).WithError(CreateVolunteerHandler.DescriptionValidation);
+        
+        RuleFor(v => v.ExperienceYears).WithError(CreateVolunteerHandler.ExperienceYearsValidation);
 
         RuleForEach(v => v.RequisitesForHelp).MustBeValueObject(r => RequisitesForHelp.Create(r.Title, r.Description));
 

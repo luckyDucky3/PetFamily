@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Extensions;
@@ -23,18 +24,10 @@ public class VolunteerController : ControllerBase
         var validationResult = await validator.ValidateAsync(createVolunteerCommand, cancellationToken);
 
         if (!validationResult.IsValid)
-        {
-            var validationErrors = validationResult.Errors;
-
-            var errors = from validationError in validationErrors
-                let error = Error.Validation(validationError.ErrorCode, validationError.ErrorMessage)
-                select new ResponseError(error.Code, error.Message, validationError.PropertyName);
-
-            var envelope = Envelope.Error(errors);
-            return BadRequest(envelope);
-        }
+            return validationResult.ToValidationErrorResponse();
 
         var result = await createVolunteerHandler.Handle(createVolunteerCommand, cancellationToken);
+        
         if (result.IsFailure)
             return result.Error.ToResponse();
 
