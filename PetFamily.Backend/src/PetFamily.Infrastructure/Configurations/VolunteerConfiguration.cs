@@ -18,8 +18,11 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
     {
         builder.ToTable("volunteer");
         builder.HasKey(v => v.Id);
+        
         builder.Property(v => v.Id)
-            .HasConversion(id => id.Value, value => VolunteerId.Create(value))
+            .HasConversion(
+                id => id.Value, 
+                value => VolunteerId.Create(value))
             .IsRequired()
             .HasColumnName("volunteer_id");
         
@@ -65,7 +68,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             .IsRequired()
             .HasColumnName("phone_number");
 
-        builder.Property(v => v.RequisitesForHelp).JsonValueObjectCollectionConversion();
+        builder.Property(v => v.HelpRequisites).JsonValueObjectCollectionConversion();
 
         builder.Property(v => v.SocialNetworks).JsonValueObjectCollectionConversion();
     }

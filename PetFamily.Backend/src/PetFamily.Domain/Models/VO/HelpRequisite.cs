@@ -3,12 +3,13 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.VO;
 
-public sealed class RequisitesForHelp : ValueObject
+public sealed class HelpRequisite : ValueObject
 {
     public string Title { get; }
     public string DescriptionOfDonation { get; }
 
-    private RequisitesForHelp(string title, string descriptionOfDonation)
+    public HelpRequisite() { }
+    private HelpRequisite(string title, string descriptionOfDonation)
     {
         Title = title;
         DescriptionOfDonation = descriptionOfDonation;
@@ -18,17 +19,17 @@ public sealed class RequisitesForHelp : ValueObject
         yield return Title;
         yield return DescriptionOfDonation;
     }
-    public static Result<RequisitesForHelp, Error> Create(string title, string descriptionOfDonation)
+    public static Result<HelpRequisite, Error> Create(string title, string descriptionOfDonation)
     {
         if (string.IsNullOrWhiteSpace(title))
-            return Result.Failure<RequisitesForHelp, Error>(
+            return Result.Failure<HelpRequisite, Error>(
                 Errors.General.IsInvalid("Title"));
         
         if (string.IsNullOrWhiteSpace(descriptionOfDonation))
-            return Result.Failure<RequisitesForHelp, Error>(
+            return Result.Failure<HelpRequisite, Error>(
                 Errors.General.IsInvalid("Description"));
         
-        return Result.Success<RequisitesForHelp, Error>(
-            new RequisitesForHelp(title, descriptionOfDonation));
+        return Result.Success<HelpRequisite, Error>(
+            new HelpRequisite(title, descriptionOfDonation));
     }
 }

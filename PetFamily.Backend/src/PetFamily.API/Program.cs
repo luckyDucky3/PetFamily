@@ -2,7 +2,6 @@ using PetFamily.API.Extensions;
 using PetFamily.API.Middlewares;
 using PetFamily.Application;
 using PetFamily.Application.Volunteers;
-using PetFamily.Application.Volunteers.CreateVolunteers;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.Repositories;
 using Serilog;
