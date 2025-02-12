@@ -28,12 +28,10 @@ public static class ResponseExtensions
         return new ObjectResult(envelope) { StatusCode = statusCode };
     }
     
-    public static ActionResult ToValidationErrorResponse(this ValidationResult result)
+    public static ActionResult ToValidationErrorsResponse(this ValidationResult result)
     {
         if (result.IsValid)
-        {
             throw new InvalidOperationException("Result can not be succeed");
-        }
             
         var validationErrors = result.Errors;
 

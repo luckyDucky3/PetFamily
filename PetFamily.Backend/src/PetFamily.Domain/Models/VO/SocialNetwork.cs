@@ -8,6 +8,7 @@ public sealed class SocialNetwork : ValueObject
     public string Name { get; }
     public string Link { get; }
 
+    public SocialNetwork() { }
     private SocialNetwork(string name, string link)
     {
         Name = name;

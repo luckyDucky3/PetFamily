@@ -1,8 +1,6 @@
-using FluentValidation.AspNetCore;
 using PetFamily.Application.Volunteers.Dto;
-using PetFamily.Domain.Models.VO;
 
-namespace PetFamily.Application.Volunteers.CreateVolunteers;
+namespace PetFamily.Application.Volunteers.Create;
 
 public record CreateVolunteerRequest(
     FullNameDto FullName,
@@ -11,4 +9,4 @@ public record CreateVolunteerRequest(
     string EmailAddress,
     int ExperienceYears,
     List<SocialNetworkDto>? SocialNetworks,
-    List<RequisitesForHelpDto>? RequisitesForHelp);
+    List<HelpRequisiteDto>? RequisitesForHelp);

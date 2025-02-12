@@ -9,7 +9,9 @@ namespace PetFamily.Domain.Models.Entities.Volunteer;
 public sealed class Volunteer : Entity<VolunteerId>
 {
     //EF
-    private Volunteer(VolunteerId id) : base(id) {}
+    private Volunteer(VolunteerId id) : base(id)
+    {
+    }
 
     public FullName Name { get; private set; } = null!;
     public EmailAddress Email { get; private set; } = null!;
@@ -23,25 +25,33 @@ public sealed class Volunteer : Entity<VolunteerId>
     private readonly List<SocialNetwork> _socialNetworks = [];
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
 
-    private readonly List<RequisitesForHelp> _requisitesForHelp = [];
-    public IReadOnlyList<RequisitesForHelp> RequisitesForHelp => _requisitesForHelp;
+    private readonly List<HelpRequisite> _helpRequisites = [];
+    public IReadOnlyList<HelpRequisite> HelpRequisites => _helpRequisites;
 
     private readonly List<Pet> _pets = [];
     public IReadOnlyList<Pet> Pets => _pets;
 
     public static Result<Volunteer, Error> Create(
-        VolunteerId id, FullName fullName, EmailAddress emailAddress,
-        string description, PhoneNumber phoneNumber, int experienceYears)
+        VolunteerId id, 
+        FullName fullName, 
+        string description, 
+        EmailAddress emailAddress, 
+        PhoneNumber phoneNumber, 
+        int experienceYears)
     {
         Volunteer volunteer = new Volunteer(
-            id, fullName, experienceYears, phoneNumber, description, emailAddress);
+            id, fullName, description, emailAddress, phoneNumber, experienceYears);
 
         return Result.Success<Volunteer, Error>(volunteer);
     }
 
     private Volunteer(
-        VolunteerId id, FullName fullName, int experienceYears,
-        PhoneNumber phoneNumber, string description, EmailAddress emailAddress)
+        VolunteerId id,
+        FullName fullName, 
+        string description, 
+        EmailAddress emailAddress, 
+        PhoneNumber phoneNumber, 
+        int experienceYears)
     {
         Id = id;
         Name = fullName;
@@ -51,9 +61,35 @@ public sealed class Volunteer : Entity<VolunteerId>
         PhoneNumber = phoneNumber;
     }
 
-    public void CreateSocialNetworks(List<SocialNetwork> socialNetworks)
+    public void AddSocialNetworks(List<SocialNetwork> socialNetworks)
         => _socialNetworks.AddRange(socialNetworks);
 
-    public void CreateRequisitesForHelp(List<RequisitesForHelp> requisitesForHelp)
-        => _requisitesForHelp.AddRange(requisitesForHelp);
+    public void AddHelpRequisites(List<HelpRequisite> helpRequisites)
+        => _helpRequisites.AddRange(helpRequisites);
+    
+    public void UpdateSocialNetworks(List<SocialNetwork> socialNetworks)
+    {
+        _socialNetworks.Clear();
+        _socialNetworks.AddRange(socialNetworks);
+    }
+    
+    public void UpdateHelpRequisites(List<HelpRequisite> helpRequisites)
+    {
+        _helpRequisites.Clear();
+        _helpRequisites.AddRange(helpRequisites);
+    }
+    
+    public void UpdateMainInfo(
+        FullName fullName, 
+        string description, 
+        EmailAddress emailAddress, 
+        PhoneNumber phoneNumber, 
+        int experienceYears)
+    {
+        Name = fullName;
+        Description = description;
+        Email = emailAddress;
+        PhoneNumber = phoneNumber;
+        ExperienceYears = experienceYears;
+    }
 }

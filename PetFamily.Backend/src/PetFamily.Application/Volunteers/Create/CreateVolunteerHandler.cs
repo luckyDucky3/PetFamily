@@ -1,22 +1,23 @@
-using System.Text;
 using CSharpFunctionalExtensions;
-using FluentValidation;
-using Microsoft.AspNetCore.Http.HttpResults;
-using PetFamily.Domain.Models.Entities;
+using Microsoft.Extensions.Logging;
 using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Volunteers.CreateVolunteers;
+namespace PetFamily.Application.Volunteers.Create;
 
 public class CreateVolunteerHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
+    private readonly ILogger<CreateVolunteerHandler> _logger;
 
-    public CreateVolunteerHandler(IVolunteersRepository volunteersRepository)
+    public CreateVolunteerHandler(
+        IVolunteersRepository volunteersRepository, 
+        ILogger<CreateVolunteerHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
+        _logger = logger;
     }
 
     public async Task<Result<Guid, Error>> Handle(
@@ -40,33 +41,41 @@ public class CreateVolunteerHandler
             createVolunteerCommand.EmailAddress).Value;
 
         List<SocialNetwork> socialNetworks = [];
-        socialNetworks.AddRange(
-            createVolunteerCommand.SocialNetworks.Select(
-                socialNetwork => SocialNetwork.Create(
-                    socialNetwork.Name, socialNetwork.Link).Value));
+        if (createVolunteerCommand.SocialNetworks is not null)
+            socialNetworks.AddRange(
+                createVolunteerCommand.SocialNetworks.Select(
+                    socialNetwork => SocialNetwork.Create(
+                        socialNetwork.Name, socialNetwork.Link).Value));
 
-        List<RequisitesForHelp> requisitesForHelp = [];
-        requisitesForHelp.AddRange(
-            createVolunteerCommand.RequisitesForHelp.Select(
-                requisiteForHelp => RequisitesForHelp.Create(
-                    requisiteForHelp.Title, requisiteForHelp.Description).Value));
+        
+        List<HelpRequisite> requisitesForHelp = [];
+        if (createVolunteerCommand.RequisitesForHelp is not null)
+            requisitesForHelp.AddRange(
+                createVolunteerCommand.RequisitesForHelp.Select(
+                    requisiteForHelp => HelpRequisite.Create(
+                        requisiteForHelp.Title, requisiteForHelp.Description).Value));
 
         var volunteerResult = Volunteer.Create(
-            volunteerId, fullNameResult,
-            emailAddress, description,
-            phoneNumber, experienceYears);
+            volunteerId, 
+            fullNameResult,
+            description,
+            emailAddress,
+            phoneNumber, 
+            experienceYears);
 
         if (volunteerResult.IsFailure)
             return Result.Failure<Guid, Error>(volunteerResult.Error);
 
         if (socialNetworks.Any())
-            volunteerResult.Value.CreateSocialNetworks(socialNetworks);
+            volunteerResult.Value.AddSocialNetworks(socialNetworks);
 
         if (requisitesForHelp.Any())
-            volunteerResult.Value.CreateRequisitesForHelp(requisitesForHelp);
+            volunteerResult.Value.AddHelpRequisites(requisitesForHelp);
 
         Guid vId = await _volunteersRepository.Add(volunteerResult.Value, cancellationToken);
-        return Result.Success<Guid, Error>(vId);
         
+        _logger.LogInformation("Volunteer has been successfully added");
+        
+        return Result.Success<Guid, Error>(vId);
     }
 }
