@@ -1,11 +1,16 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Volunteers.AddSocialNetworks;
+using PetFamily.Application.Volunteers.Dto;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.AddHelpRequisites;
+
+public record AddHelpRequisitesRequest(Guid Id, ListHelpRequisiteDto HelpRequisiteDtos);
+
+public record AddHelpRequisitesCommand(Guid Id, List<HelpRequisiteDto> HelpRequisiteDtos);
 
 public class AddHelpRequisitesHandler
 {

@@ -126,13 +126,13 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("status");
 
-                    b.Property<Guid?>("VolunteerId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("volunteer_id");
-
                     b.Property<double?>("Weight")
                         .HasColumnType("double precision")
                         .HasColumnName("weight");
+
+                    b.Property<Guid?>("volunteer_id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("volunteer_id");
 
                     b.ComplexProperty<Dictionary<string, object>>("Address", "PetFamily.Domain.Models.Entities.Volunteer.Pet.Address#Address", b1 =>
                         {
@@ -162,7 +162,7 @@ namespace PetFamily.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_pet");
 
-                    b.HasIndex("VolunteerId")
+                    b.HasIndex("volunteer_id")
                         .HasDatabaseName("ix_pet_volunteer_id");
 
                     b.ToTable("pet", (string)null);
@@ -250,7 +250,7 @@ namespace PetFamily.Infrastructure.Migrations
                 {
                     b.HasOne("PetFamily.Domain.Models.Entities.Volunteer.Volunteer", null)
                         .WithMany("Pets")
-                        .HasForeignKey("VolunteerId")
+                        .HasForeignKey("volunteer_id")
                         .HasConstraintName("fk_pet_volunteer_volunteer_id");
 
                     b.OwnsOne("PetFamily.Domain.Models.VO.SpeciesBreeds", "SpeciesBreeds", b1 =>

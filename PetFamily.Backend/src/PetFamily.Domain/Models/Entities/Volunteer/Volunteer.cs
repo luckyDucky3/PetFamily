@@ -6,8 +6,9 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.Entities.Volunteer;
 
-public sealed class Volunteer : Entity<VolunteerId>
+public sealed class Volunteer : Entity<VolunteerId>, ISoftDeletable
 {
+    public bool IsDeleted { get; private set; } = false;
     //EF
     private Volunteer(VolunteerId id) : base(id)
     {
@@ -92,4 +93,22 @@ public sealed class Volunteer : Entity<VolunteerId>
         PhoneNumber = phoneNumber;
         ExperienceYears = experienceYears;
     }
+
+    public void Deactivate()
+    {
+        if (!IsDeleted)
+            IsDeleted = true;
+
+        foreach (var pet in Pets)
+        {
+            pet.Deactivate();
+        }
+    }
+
+    public void Activate()
+    {
+        if (IsDeleted)
+            IsDeleted = false;
+    }
+    
 }

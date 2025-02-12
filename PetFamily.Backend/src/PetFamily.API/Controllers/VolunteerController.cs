@@ -6,6 +6,7 @@ using PetFamily.API.Response;
 using PetFamily.Application.Volunteers.AddHelpRequisites;
 using PetFamily.Application.Volunteers.AddSocialNetworks;
 using PetFamily.Application.Volunteers.Create;
+using PetFamily.Application.Volunteers.Delete;
 using PetFamily.Application.Volunteers.Dto;
 using PetFamily.Application.Volunteers.UpdateMainInfo;
 using PetFamily.Domain.Shared;
@@ -18,9 +19,9 @@ public class VolunteerController : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
+        [FromBody] CreateVolunteerRequest createVolunteerRequest,
         [FromServices] CreateVolunteerHandler createVolunteerHandler,
         [FromServices] IValidator<CreateVolunteerRequest> validator,
-        [FromBody] CreateVolunteerRequest createVolunteerRequest,
         CancellationToken cancellationToken = default)
     {
         var validationResult = await validator.ValidateAsync(createVolunteerRequest, cancellationToken);
@@ -117,5 +118,27 @@ public class VolunteerController : ControllerBase
             return addHelpRequisitesResult.Error.ToResponse();
 
         return Ok(addHelpRequisitesResult.Value);
+    }
+
+    [HttpDelete("{id:guid}/volunteer")]
+    public async Task<ActionResult<Guid>> Delete(
+        [FromRoute] Guid id,
+        [FromServices] DeleteVolunteerHandler deleteVolunteerHandler,
+        [FromServices] IValidator<DeleteVolunteerRequest> validator,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new DeleteVolunteerRequest(id);
+        
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            return validationResult.ToValidationErrorsResponse();
+        
+        var command = new DeleteVolunteerCommand(id);
+
+        var deleteVolunteerResult = await deleteVolunteerHandler.Handle(command, cancellationToken);
+        if (deleteVolunteerResult.IsFailure)
+            return deleteVolunteerResult.Error.ToResponse();
+        
+        return Ok(deleteVolunteerResult.Value);
     }
 }

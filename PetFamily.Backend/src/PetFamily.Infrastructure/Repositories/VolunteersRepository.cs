@@ -51,6 +51,18 @@ public class VolunteersRepository : IVolunteersRepository
         return volunteer.Id.Value;
     }
 
+    public async Task<Guid> Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Remove(volunteer);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return volunteer.Id.Value;
+    }
+
+    public Task<Guid> SoftDelete(VolunteerId id, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Volunteer?> GetByFullName(
         FullName fullName, 
         CancellationToken cancellationToken = default)

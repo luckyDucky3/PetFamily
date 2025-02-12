@@ -1,11 +1,30 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Volunteers.Dto;
 using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.Create;
+
+public record CreateVolunteerRequest(
+    FullNameDto FullName,
+    string Description,
+    string PhoneNumber,
+    string EmailAddress,
+    int ExperienceYears,
+    List<SocialNetworkDto>? SocialNetworks,
+    List<HelpRequisiteDto>? RequisitesForHelp);
+    
+public record CreateVolunteerCommand(
+    FullNameDto FullName,
+    string Description,
+    string PhoneNumber,
+    string EmailAddress,
+    int ExperienceYears,
+    List<SocialNetworkDto>? SocialNetworks,
+    List<HelpRequisiteDto>? RequisitesForHelp);
 
 public class CreateVolunteerHandler
 {
