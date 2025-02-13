@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
-using PetFamily.Application.Volunteers.Dto;
+using PetFamily.Application.Volunteers._Dto;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;

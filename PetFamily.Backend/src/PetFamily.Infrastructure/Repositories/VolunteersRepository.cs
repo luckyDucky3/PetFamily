@@ -34,10 +34,9 @@ public class VolunteersRepository : IVolunteersRepository
         VolunteerId voluneerId, 
         CancellationToken cancellationToken = default)
     {
-        var volunteerIdValue = voluneerId.Value;
         var volunteer = await _dbContext.Volunteers
             .Include(v => v.Pets)
-            .FirstOrDefaultAsync(v => v.Id == volunteerIdValue, cancellationToken);
+            .FirstOrDefaultAsync(v => v.Id == voluneerId, cancellationToken);
         
         return volunteer;
     }
@@ -56,11 +55,6 @@ public class VolunteersRepository : IVolunteersRepository
         _dbContext.Remove(volunteer);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return volunteer.Id.Value;
-    }
-
-    public Task<Guid> SoftDelete(VolunteerId id, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<Volunteer?> GetByFullName(

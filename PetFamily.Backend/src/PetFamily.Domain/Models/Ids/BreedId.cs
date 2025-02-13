@@ -10,10 +10,10 @@ public class BreedId : ComparableValueObject
     {
         Value = value;
     }
-    
-    public static BreedId NewPetId() => new BreedId(Guid.NewGuid());
-    public static BreedId Empty() => new BreedId(Guid.Empty);
-    public static BreedId Create(Guid id) => new BreedId(id);
+
+    public static BreedId NewPetId() => new (Guid.NewGuid());
+    public static BreedId Empty() => new (Guid.Empty);
+    public static BreedId Create(Guid id) => new (id);
 
 
     protected override IEnumerable<IComparable> GetComparableEqualityComponents()

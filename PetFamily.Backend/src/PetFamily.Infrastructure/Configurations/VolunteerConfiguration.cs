@@ -73,12 +73,17 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         builder.Property(v => v.SocialNetworks).JsonValueObjectCollectionConversion();
         
         builder.HasMany(v => v.Pets)
-            .WithOne()
-            .HasForeignKey("volunteer_id")
+            .WithOne(p => p.Volunteer)
+            .HasForeignKey("pet_volunteer_id")
             .OnDelete(DeleteBehavior.Cascade);
         
-        builder.Property<bool>("_isDeleted")
+        builder.Property<bool>("IsDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");
+        
+        builder.Property<DateTime>("DeletionDate")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .SetDateTimeKind(DateTimeKind.Utc)
+            .HasColumnName("deletion_date");
     }
 }

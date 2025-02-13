@@ -1,3 +1,3 @@
-namespace PetFamily.Application.Volunteers.Dto;
+namespace PetFamily.Application.Volunteers._Dto;
 
 public record ListSocialNetworkDto(List<SocialNetworkDto> SocialNetworkDtos);

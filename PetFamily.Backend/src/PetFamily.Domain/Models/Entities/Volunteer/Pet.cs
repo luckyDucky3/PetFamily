@@ -6,14 +6,13 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.Entities.Volunteer;
 
-public sealed class Pet : Entity<PetId>, ISoftDeletable
+public sealed class Pet : SoftDeletableEntity<PetId>
 {
-    public bool IsDeleted { get; private set; }
 
-    private Pet(PetId id) : base(id)
-    {
-    }
+    private Pet(PetId id) : base(id) { }
 
+    public Volunteer Volunteer { get; private set; }
+    
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public SpeciesBreeds SpeciesBreeds { get; private set; } = null!;
@@ -33,9 +32,9 @@ public sealed class Pet : Entity<PetId>, ISoftDeletable
         PetId petId, string name, string description, SpeciesBreeds speciesBreeds,
         Color color, Address address, string infoAboutHealth,
         double? weight, double? height, PhoneNumber phoneNumber,
-        bool isCastrate, bool isVaccinate, DateTime birthDate, Status status)
+        bool isCastrate, bool isVaccinate, DateTime birthDate, Status status) : base(petId)
     {
-        Id = petId;
+        //Id = petId;
         Name = name;
         Description = description;
         SpeciesBreeds = speciesBreeds;
@@ -82,18 +81,5 @@ public sealed class Pet : Entity<PetId>, ISoftDeletable
             birthDate, status);
 
         return Result.Success<Pet, Error>(pet);
-    }
-
-    public void Deactivate()
-    {
-        if (!IsDeleted)
-            IsDeleted = true;
-    }
-
-
-    public void Activate()
-    {
-        if (IsDeleted)
-            IsDeleted = false;
     }
 }
