@@ -5,9 +5,9 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.Delete;
 
-public class DeleteVolunteerValidator : AbstractValidator<DeleteVolunteerRequest>
+public class HardDeleteVolunteerValidator : AbstractValidator<HardDeleteVolunteerRequest>
 {
-    public DeleteVolunteerValidator()
+    public HardDeleteVolunteerValidator()
     {
         RuleFor(v => v.Id).NotEmpty().WithError(Errors.General.IsRequired("Id"));
     }

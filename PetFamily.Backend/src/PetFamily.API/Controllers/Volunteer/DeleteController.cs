@@ -14,17 +14,17 @@ public class DeleteController : ControllerBase
     [HttpDelete("hard/{id:guid}/volunteer")]
     public async Task<ActionResult<Guid>> Delete(
         [FromRoute] Guid id,
-        [FromServices] DeleteVolunteerHandler deleteVolunteerHandler,
-        [FromServices] IValidator<DeleteVolunteerRequest> validator,
+        [FromServices] HardDeleteVolunteerHandler deleteVolunteerHandler,
+        [FromServices] IValidator<HardDeleteVolunteerRequest> validator,
         CancellationToken cancellationToken = default)
     {
-        var request = new DeleteVolunteerRequest(id);
+        var request = new HardDeleteVolunteerRequest(id);
         
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
             return validationResult.ToValidationErrorsResponse();
         
-        var command = new DeleteVolunteerCommand(id);
+        var command = new HardDeleteVolunteerCommand(id);
 
         var deleteVolunteerResult = await deleteVolunteerHandler.Handle(command, cancellationToken);
         if (deleteVolunteerResult.IsFailure)

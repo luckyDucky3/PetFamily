@@ -7,25 +7,25 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.Delete;
 
-public record DeleteVolunteerRequest(Guid Id);
+public record HardDeleteVolunteerRequest(Guid Id);
 
-public record DeleteVolunteerCommand(Guid Id);
+public record HardDeleteVolunteerCommand(Guid Id);
 
-public class DeleteVolunteerHandler
+public class HardDeleteVolunteerHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly ILogger<DeleteVolunteerHandler> _logger;
+    private readonly ILogger<HardDeleteVolunteerHandler> _logger;
 
-    public DeleteVolunteerHandler(
+    public HardDeleteVolunteerHandler(
         IVolunteersRepository volunteersRepository,
-        ILogger<DeleteVolunteerHandler> logger)
+        ILogger<HardDeleteVolunteerHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
         _logger = logger;
     }
 
     public async Task<Result<Guid, Error>> Handle(
-        DeleteVolunteerCommand volunteerCommand,
+        HardDeleteVolunteerCommand volunteerCommand,
         CancellationToken cancellationToken = default)
     {
         var volunteerId = VolunteerId.Create(volunteerCommand.Id);
@@ -34,7 +34,7 @@ public class DeleteVolunteerHandler
         if (result == null)
             return Result.Failure<Guid, Error>(Errors.General.IsNotFound(volunteerCommand.Id));
 
-        var id = await _volunteersRepository.Delete(result, cancellationToken);
+        var id = await _volunteersRepository.HardDelete(result, cancellationToken);
 
         _logger.LogInformation("Volunteer has been successfully deleted");
 

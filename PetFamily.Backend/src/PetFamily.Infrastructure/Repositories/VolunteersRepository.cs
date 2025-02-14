@@ -50,7 +50,7 @@ public class VolunteersRepository : IVolunteersRepository
         return volunteer.Id.Value;
     }
 
-    public async Task<Guid> Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
+    public async Task<Guid> HardDelete(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
         _dbContext.Remove(volunteer);
         await _dbContext.SaveChangesAsync(cancellationToken);
