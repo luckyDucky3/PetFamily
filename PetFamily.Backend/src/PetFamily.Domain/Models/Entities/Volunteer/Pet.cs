@@ -6,33 +6,12 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.Entities.Volunteer;
 
-public sealed class Pet : Entity<PetId>
+public sealed class Pet : SoftDeletableEntity<PetId>
 {
-    //EF
-    private Pet(PetId id) : base(id) {}
 
-    public Pet(
-        PetId petId, string name, string description, SpeciesBreeds speciesBreeds, 
-        Color color, Address address, string infoAboutHealth,
-        double? weight, double? height, PhoneNumber phoneNumber, 
-        bool isCastrate, bool isVaccinate, DateTime birthDate, Status status)
-    {
-        Id = petId;
-        Name = name;
-        Description = description;
-        SpeciesBreeds = speciesBreeds;
-        Color = color;
-        Address = address;
-        InfoAboutHealth = infoAboutHealth;
-        Weight = weight;
-        Height = height;
-        PhoneNumber = phoneNumber;
-        IsCastrate = isCastrate;
-        IsVaccinate = isVaccinate;
-        Status = status;
-        BirthDate = birthDate;
-        CreatedOn = DateTime.UtcNow;
-    }
+    private Pet(PetId id) : base(id) { }
+
+    public Volunteer Volunteer { get; private set; }
     
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
@@ -49,35 +28,58 @@ public sealed class Pet : Entity<PetId>
     public Status Status { get; private set; }
     public DateTime CreatedOn { get; private set; }
 
+    public Pet(
+        PetId petId, string name, string description, SpeciesBreeds speciesBreeds,
+        Color color, Address address, string infoAboutHealth,
+        double? weight, double? height, PhoneNumber phoneNumber,
+        bool isCastrate, bool isVaccinate, DateTime birthDate, Status status) : base(petId)
+    {
+        //Id = petId;
+        Name = name;
+        Description = description;
+        SpeciesBreeds = speciesBreeds;
+        Color = color;
+        Address = address;
+        InfoAboutHealth = infoAboutHealth;
+        Weight = weight;
+        Height = height;
+        PhoneNumber = phoneNumber;
+        IsCastrate = isCastrate;
+        IsVaccinate = isVaccinate;
+        Status = status;
+        BirthDate = birthDate;
+        CreatedOn = DateTime.UtcNow;
+    }
+
     public Result<Pet, Error> Create(
         PetId petId, string name, string description, SpeciesBreeds speciesBreeds,
         Color color, Address address, string infoAboutHealth, double? weight,
-        double? height, PhoneNumber phoneNumber, bool isCastrate, 
+        double? height, PhoneNumber phoneNumber, bool isCastrate,
         bool isVaccinate, DateTime birthDate, Status status)
     {
         if (string.IsNullOrWhiteSpace(name))
             return Result.Failure<Pet, Error>(Errors.General.IsRequired("Name"));
-        
+
         if (string.IsNullOrWhiteSpace(description))
             return Result.Failure<Pet, Error>(Errors.General.IsRequired("Description"));
-        
+
         if (string.IsNullOrWhiteSpace(infoAboutHealth))
             return Result.Failure<Pet, Error>(Errors.General.IsRequired("Info about health"));
-        
+
         if (weight < 0)
             return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Weight"));
-        
+
         if (height < 0)
             return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Height"));
-        
+
         if (BirthDate < DateTime.MinValue || BirthDate > DateTime.Now)
             return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Birthdate"));
-        
-        Pet pet = new Pet(petId, name, description, speciesBreeds, 
-            color, address, infoAboutHealth, weight, 
-            height, phoneNumber, isCastrate, isVaccinate, 
+
+        Pet pet = new Pet(petId, name, description, speciesBreeds,
+            color, address, infoAboutHealth, weight,
+            height, phoneNumber, isCastrate, isVaccinate,
             birthDate, status);
-        
+
         return Result.Success<Pet, Error>(pet);
     }
 }

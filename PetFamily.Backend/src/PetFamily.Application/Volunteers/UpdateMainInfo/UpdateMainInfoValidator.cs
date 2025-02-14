@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices.JavaScript;
 using FluentValidation;
-using PetFamily.Application.Volunteers.Validation;
+using PetFamily.Application.Volunteers._Validation;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 

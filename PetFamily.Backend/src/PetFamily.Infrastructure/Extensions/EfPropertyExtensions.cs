@@ -19,7 +19,7 @@ public static class EfPropertyExtensions
         this PropertyBuilder<IReadOnlyList<TValueObjects>> builder)
     {
         return builder.HasConversion(
-            s => JsonSerializer.Serialize(s, JsonSerializerOptions.Default),
+            l => JsonSerializer.Serialize(l, JsonSerializerOptions.Default),
             str => JsonSerializer.Deserialize<IReadOnlyList<TValueObjects>>(str, JsonSerializerOptions.Default)!,
             new ValueComparer<IReadOnlyList<TValueObjects>>(
                 (c1, c2) => c1!.SequenceEqual(c2!),

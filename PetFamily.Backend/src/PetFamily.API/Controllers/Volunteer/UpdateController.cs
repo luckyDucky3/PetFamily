@@ -1,50 +1,19 @@
-using System.ComponentModel.DataAnnotations;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Extensions;
-using PetFamily.API.Response;
+using PetFamily.Application.Volunteers._Dto;
 using PetFamily.Application.Volunteers.AddHelpRequisites;
 using PetFamily.Application.Volunteers.AddSocialNetworks;
-using PetFamily.Application.Volunteers.Create;
-using PetFamily.Application.Volunteers.Dto;
 using PetFamily.Application.Volunteers.UpdateMainInfo;
-using PetFamily.Domain.Shared;
 
-namespace PetFamily.API.Controllers;
+namespace PetFamily.API.Controllers.Volunteer;
+
 
 [ApiController]
 [Route("[controller]")]
-public class VolunteerController : ControllerBase
+
+public class UpdateController : ControllerBase
 {
-    [HttpPost]
-    public async Task<ActionResult<Guid>> Create(
-        [FromServices] CreateVolunteerHandler createVolunteerHandler,
-        [FromServices] IValidator<CreateVolunteerRequest> validator,
-        [FromBody] CreateVolunteerRequest createVolunteerRequest,
-        CancellationToken cancellationToken = default)
-    {
-        var validationResult = await validator.ValidateAsync(createVolunteerRequest, cancellationToken);
-
-        var createVolunteerCommand = new CreateVolunteerCommand(
-            createVolunteerRequest.FullName,
-            createVolunteerRequest.Description,
-            createVolunteerRequest.PhoneNumber,
-            createVolunteerRequest.EmailAddress,
-            createVolunteerRequest.ExperienceYears,
-            createVolunteerRequest.SocialNetworks,
-            createVolunteerRequest.RequisitesForHelp);
-        
-        if (!validationResult.IsValid)
-            return validationResult.ToValidationErrorsResponse();
-
-        var result = await createVolunteerHandler.Handle(createVolunteerCommand, cancellationToken);
-
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-
-        return Created(result.Value.ToString(), null);
-    }
-
     [HttpPatch("{id:guid}/main-info")]
     public async Task<ActionResult<Guid>> Update(
         [FromRoute] Guid id,

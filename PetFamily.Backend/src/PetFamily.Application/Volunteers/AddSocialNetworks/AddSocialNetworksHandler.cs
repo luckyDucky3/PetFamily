@@ -1,10 +1,14 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Volunteers._Dto;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.AddSocialNetworks;
+
+public record AddSocialNetworksCommand(Guid Id, List<SocialNetworkDto> SocialNetworkDtos);
+public record AddSocialNetworksRequest(Guid Id, ListSocialNetworkDto SocialNetworkDtos);
 
 public class AddSocialNetworksHandler
 {

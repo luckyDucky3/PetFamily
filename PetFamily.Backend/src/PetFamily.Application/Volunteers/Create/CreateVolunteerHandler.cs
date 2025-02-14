@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Volunteers._Dto;
 using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
@@ -7,13 +8,31 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.Create;
 
+public record CreateVolunteerRequest(
+    FullNameDto FullName,
+    string Description,
+    string PhoneNumber,
+    string EmailAddress,
+    int ExperienceYears,
+    List<SocialNetworkDto>? SocialNetworks,
+    List<HelpRequisiteDto>? RequisitesForHelp);
+
+public record CreateVolunteerCommand(
+    FullNameDto FullName,
+    string Description,
+    string PhoneNumber,
+    string EmailAddress,
+    int ExperienceYears,
+    List<SocialNetworkDto>? SocialNetworks,
+    List<HelpRequisiteDto>? RequisitesForHelp);
+
 public class CreateVolunteerHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly ILogger<CreateVolunteerHandler> _logger;
 
     public CreateVolunteerHandler(
-        IVolunteersRepository volunteersRepository, 
+        IVolunteersRepository volunteersRepository,
         ILogger<CreateVolunteerHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
@@ -47,20 +66,19 @@ public class CreateVolunteerHandler
                     socialNetwork => SocialNetwork.Create(
                         socialNetwork.Name, socialNetwork.Link).Value));
 
-        
         List<HelpRequisite> requisitesForHelp = [];
         if (createVolunteerCommand.RequisitesForHelp is not null)
             requisitesForHelp.AddRange(
                 createVolunteerCommand.RequisitesForHelp.Select(
                     requisiteForHelp => HelpRequisite.Create(
                         requisiteForHelp.Title, requisiteForHelp.Description).Value));
-
+        
         var volunteerResult = Volunteer.Create(
-            volunteerId, 
+            volunteerId,
             fullNameResult,
             description,
             emailAddress,
-            phoneNumber, 
+            phoneNumber,
             experienceYears);
 
         if (volunteerResult.IsFailure)
@@ -73,9 +91,9 @@ public class CreateVolunteerHandler
             volunteerResult.Value.AddHelpRequisites(requisitesForHelp);
 
         Guid vId = await _volunteersRepository.Add(volunteerResult.Value, cancellationToken);
-        
+
         _logger.LogInformation("Volunteer has been successfully added");
-        
+
         return Result.Success<Guid, Error>(vId);
     }
 }

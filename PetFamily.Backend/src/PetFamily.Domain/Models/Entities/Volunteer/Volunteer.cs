@@ -6,12 +6,10 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Models.Entities.Volunteer;
 
-public sealed class Volunteer : Entity<VolunteerId>
+public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
 {
     //EF
-    private Volunteer(VolunteerId id) : base(id)
-    {
-    }
+    private Volunteer(VolunteerId id) : base(id) { }
 
     public FullName Name { get; private set; } = null!;
     public EmailAddress Email { get; private set; } = null!;
@@ -51,9 +49,8 @@ public sealed class Volunteer : Entity<VolunteerId>
         string description, 
         EmailAddress emailAddress, 
         PhoneNumber phoneNumber, 
-        int experienceYears)
+        int experienceYears) : base(id)
     {
-        Id = id;
         Name = fullName;
         ExperienceYears = experienceYears;
         Email = emailAddress;
@@ -92,4 +89,25 @@ public sealed class Volunteer : Entity<VolunteerId>
         PhoneNumber = phoneNumber;
         ExperienceYears = experienceYears;
     }
+
+    public override void Deactivate()
+    {
+        if (!IsDeleted)
+        {
+            IsDeleted = true;
+            DeletionDate = DateTime.UtcNow;
+        }
+        
+        foreach (var pet in Pets)
+        {
+            pet.Deactivate();
+        }
+    }
+
+    public override void Activate()
+    {
+        if (IsDeleted)
+            IsDeleted = false;
+    }
+    
 }
