@@ -1,7 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Extensions;
-using PetFamily.Application.Volunteers.Delete;
+using PetFamily.Application.Volunteers.HardDelete;
 using PetFamily.Application.Volunteers.SoftDelete;
 
 namespace PetFamily.API.Controllers.Volunteer;

@@ -1,11 +1,9 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
-using PetFamily.Application.Volunteers.Create;
-using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Volunteers.Delete;
+namespace PetFamily.Application.Volunteers.HardDelete;
 
 public record HardDeleteVolunteerRequest(Guid Id);
 

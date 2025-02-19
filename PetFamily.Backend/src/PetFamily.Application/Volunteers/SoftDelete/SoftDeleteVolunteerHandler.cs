@@ -1,6 +1,5 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
-using PetFamily.Application.Volunteers.Delete;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Shared;
 
