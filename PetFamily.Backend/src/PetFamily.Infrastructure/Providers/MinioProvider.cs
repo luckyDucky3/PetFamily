@@ -25,16 +25,7 @@ public class MinioProvider : IFileProvider
     {
         try
         {
-            var bucketExist =
-                await _minioClient.BucketExistsAsync(
-                    new BucketExistsArgs().WithBucket(fileData.BucketName),
-                    cancellationToken);
-            if (!bucketExist)
-            {
-                var bucket = new MakeBucketArgs().WithBucket(fileData.BucketName);
-
-                await _minioClient.MakeBucketAsync(bucket, cancellationToken);
-            }
+            await BucketExistCheck(fileData.BucketName, cancellationToken);
 
             var path = Guid.NewGuid();
 
@@ -62,7 +53,7 @@ public class MinioProvider : IFileProvider
         {
             var removeObjectArgs = new RemoveObjectArgs()
                 .WithBucket(fileDataRemove.BucketName)
-                .WithObject(fileDataRemove.ObjectName).WithVersionId(null);
+                .WithObject(fileDataRemove.ObjectName);
 
             await _minioClient.RemoveObjectAsync(removeObjectArgs, cancellationToken);
             return Result.Success<string, Error>(fileDataRemove.ObjectName);
@@ -91,6 +82,20 @@ public class MinioProvider : IFileProvider
         {
             _logger.LogError(ex, "fail to get file path in minio");
             return Result.Failure<string, Error>(Error.Failure("fail.get", "fail to get file path in minio"));
+        }
+    }
+
+    public async Task BucketExistCheck(string bucketName, CancellationToken cancellationToken = default)
+    {
+        var bucketExist =
+            await _minioClient.BucketExistsAsync(
+                new BucketExistsArgs().WithBucket(bucketName),
+                cancellationToken);
+        if (!bucketExist)
+        {
+            var bucket = new MakeBucketArgs().WithBucket(bucketName);
+
+            await _minioClient.MakeBucketAsync(bucket, cancellationToken);
         }
     }
 }
