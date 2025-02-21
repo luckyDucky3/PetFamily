@@ -11,30 +11,30 @@ public sealed class Pet : SoftDeletableEntity<PetId>
 
     private Pet(PetId id) : base(id) { }
 
-    public Volunteer Volunteer { get; private set; }
+    public SerialNumber SerialNumber { get; private set; }
+    public Volunteer Volunteer { get; private set; } = null!;
     
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
-    public SpeciesBreeds SpeciesBreeds { get; private set; } = null!;
+    public SpeciesBreeds? SpeciesBreeds { get; private set; } = null!;
     public Color Color { get; private set; }
     public Address Address { get; private set; } = null!;
     public string InfoAboutHealth { get; private set; } = null!;
     public double? Weight { get; private set; }
     public double? Height { get; private set; }
-    public PhoneNumber PhoneNumber { get; private set; } = null!;
+    public PhoneNumber? PhoneNumber { get; private set; }
     public bool IsCastrate { get; private set; }
     public bool IsVaccinate { get; private set; }
     public DateTime BirthDate { get; private set; }
     public Status Status { get; private set; }
     public DateTime CreatedOn { get; private set; }
 
-    public Pet(
-        PetId petId, string name, string description, SpeciesBreeds speciesBreeds,
-        Color color, Address address, string infoAboutHealth,
-        double? weight, double? height, PhoneNumber phoneNumber,
-        bool isCastrate, bool isVaccinate, DateTime birthDate, Status status) : base(petId)
+    private Pet(
+        PetId petId, string name, SpeciesBreeds speciesBreeds,
+        Color color, Address address, string description, string infoAboutHealth, double? weight,
+        double? height, PhoneNumber? phoneNumber, bool isCastrate,
+        bool isVaccinate, DateTime birthDate, Status status) : this(petId)
     {
-        //Id = petId;
         Name = name;
         Description = description;
         SpeciesBreeds = speciesBreeds;
@@ -51,35 +51,33 @@ public sealed class Pet : SoftDeletableEntity<PetId>
         CreatedOn = DateTime.UtcNow;
     }
 
-    public Result<Pet, Error> Create(
-        PetId petId, string name, string description, SpeciesBreeds speciesBreeds,
-        Color color, Address address, string infoAboutHealth, double? weight,
-        double? height, PhoneNumber phoneNumber, bool isCastrate,
-        bool isVaccinate, DateTime birthDate, Status status)
+    public static Result<Pet, Error> Create(
+        PetId petId, string name, SpeciesBreeds speciesBreeds,
+        Color color, Address address, string description = "", string infoAboutHealth = "",
+        double? weight = null, double? height = null, PhoneNumber? phoneNumber = null,
+        bool isCastrate = false, bool isVaccinate = false, DateTime birthDate = default, Status status = Status.FindHome)
     {
         if (string.IsNullOrWhiteSpace(name))
             return Result.Failure<Pet, Error>(Errors.General.IsRequired("Name"));
 
-        if (string.IsNullOrWhiteSpace(description))
-            return Result.Failure<Pet, Error>(Errors.General.IsRequired("Description"));
-
-        if (string.IsNullOrWhiteSpace(infoAboutHealth))
-            return Result.Failure<Pet, Error>(Errors.General.IsRequired("Info about health"));
-
-        if (weight < 0)
+        if (weight != null && weight < 0)
             return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Weight"));
 
-        if (height < 0)
+        if (height != null && height < 0)
             return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Height"));
 
-        if (BirthDate < DateTime.MinValue || BirthDate > DateTime.Now)
+        if (birthDate < DateTime.MinValue || birthDate > DateTime.Now)
             return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Birthdate"));
 
-        Pet pet = new Pet(petId, name, description, speciesBreeds,
-            color, address, infoAboutHealth, weight,
+        Pet pet = new Pet(petId, name, speciesBreeds,
+            color, address, description, infoAboutHealth, weight,
             height, phoneNumber, isCastrate, isVaccinate,
             birthDate, status);
-
+        
         return Result.Success<Pet, Error>(pet);
+    }
+    public void SetSerialNumber(SerialNumber serialNumber)
+    {
+        SerialNumber = serialNumber;
     }
 }

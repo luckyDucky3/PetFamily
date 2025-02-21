@@ -109,5 +109,37 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
         if (IsDeleted)
             IsDeleted = false;
     }
+
+    public UnitResult<Error> AddPet(Pet pet)
+    {
+        var serialNumberResult = SerialNumber.Create(_pets.Count + 1);
+        if (serialNumberResult.IsFailure)
+            UnitResult.Failure(serialNumberResult.Error);
+        pet.SetSerialNumber(serialNumberResult.Value);
+        _pets.Add(pet);
+        return UnitResult.Success<Error>();
+    }
     
+    public UnitResult<Error> MovePet (Pet pet, int position)
+    {
+        if (position > _pets.Count || position < 0)
+            return UnitResult.Failure(Error.Validation("position.invalid", "Pet position is out of range"));
+
+        if (position < pet.SerialNumber.Value)
+        {
+            for (int i = position - 1; i < pet.SerialNumber.Value - 1; i++)
+            {
+                _pets[i].SetSerialNumber(SerialNumber.Create(_pets[i].SerialNumber.Value + 1).Value);
+            }
+        }
+        else
+        {
+            for (int i = pet.SerialNumber.Value; i < position; i++)
+            {
+                _pets[i].SetSerialNumber(SerialNumber.Create(_pets[i].SerialNumber.Value - 1).Value);
+            }
+        }
+        pet.SetSerialNumber(SerialNumber.Create(position).Value);
+        return UnitResult.Success<Error>();
+    }
 }

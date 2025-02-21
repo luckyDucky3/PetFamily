@@ -53,7 +53,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .HasConversion(
                 p => p.Value,
                 s => PhoneNumber.CreateWithoutCheck(s))
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(Constants.PHONE_LENGTH)
             .HasColumnName("phone_number");
 
@@ -78,7 +78,10 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired()
             .HasColumnName("birthdate");
 
-        builder.Property(p => p.Status).IsRequired().HasColumnName("status");
+        builder.Property(p => p.Status)
+            .IsRequired()
+            .HasConversion<EnumToStringConverter<Status>>()
+            .HasColumnName("status");
 
         builder.Property(p => p.CreatedOn)
             .SetDateTimeKind(DateTimeKind.Utc)
@@ -90,9 +93,6 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired()
             .HasColumnType("text")
             .HasColumnName("info_about_health");
-
-        builder.Property(p => p.Status)
-            .HasConversion(new EnumToStringConverter<Status>());
 
         builder.OwnsOne(p => p.SpeciesBreeds, pb =>
         {
