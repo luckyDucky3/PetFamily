@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Minio;
 using PetFamily.API.Extensions;
 using PetFamily.Application.FileProvider;
 using PetFamily.Application.Pets.AddPet;
 using PetFamily.Application.Pets.GetPet;
 using PetFamily.Application.Pets.RemovePet;
-using PetFamily.Infrastructure.Options;
 
 namespace PetFamily.API.Controllers.Volunteer;
 
