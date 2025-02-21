@@ -66,7 +66,7 @@ public class VolunteerTests
     }
 
     [Fact]
-    public void Move_Pet_Across_many_Fields_By_The_Start_Returns_Success()
+    public void Move_Pet_Across_Many_Fields_By_The_Start_Returns_Success()
     {
         var volunteer = CreateStandartVolunteer();
         var pets = Enumerable.Range(1, 10)
@@ -92,7 +92,7 @@ public class VolunteerTests
     }
     
     [Fact]
-    public void Move_Pet_Across_many_Fields_By_The_End_Returns_Success()
+    public void Move_Pet_Across_Many_Fields_By_The_End_Returns_Success()
     {
         var volunteer = CreateStandartVolunteer();
         var pets = Enumerable.Range(1, 10)
