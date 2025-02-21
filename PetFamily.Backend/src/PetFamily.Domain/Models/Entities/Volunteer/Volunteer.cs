@@ -122,7 +122,7 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
     
     public UnitResult<Error> MovePet (Pet pet, int position)
     {
-        if (position > _pets.Count)
+        if (position > _pets.Count || position < 0)
             return UnitResult.Failure(Error.Validation("position.invalid", "Pet position is out of range"));
 
         if (position < pet.SerialNumber.Value)
