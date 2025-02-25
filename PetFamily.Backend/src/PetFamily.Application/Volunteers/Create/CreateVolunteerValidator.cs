@@ -5,7 +5,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.Create;
 
-public class CreateVolunteerValidator : AbstractValidator<CreateVolunteerRequest>
+public class CreateVolunteerValidator : AbstractValidator<CreateVolunteerCommand>
 {
     public CreateVolunteerValidator()
     {

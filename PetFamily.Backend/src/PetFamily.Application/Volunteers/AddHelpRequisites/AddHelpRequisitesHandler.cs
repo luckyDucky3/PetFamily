@@ -8,8 +8,6 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.AddHelpRequisites;
 
-public record AddHelpRequisitesRequest(Guid Id, ListHelpRequisiteDto HelpRequisiteDtos);
-
 public record AddHelpRequisitesCommand(Guid Id, List<HelpRequisiteDto> HelpRequisiteDtos);
 
 public class AddHelpRequisitesHandler

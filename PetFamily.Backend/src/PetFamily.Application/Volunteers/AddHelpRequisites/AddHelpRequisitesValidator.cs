@@ -6,7 +6,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.AddHelpRequisites;
 
-public class AddHelpRequisitesValidator : AbstractValidator<AddHelpRequisitesRequest>
+public class AddHelpRequisitesValidator : AbstractValidator<AddHelpRequisitesCommand>
 {
     public AddHelpRequisitesValidator()
     {

@@ -8,15 +8,6 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.Create;
 
-public record CreateVolunteerRequest(
-    FullNameDto FullName,
-    string Description,
-    string PhoneNumber,
-    string EmailAddress,
-    int ExperienceYears,
-    List<SocialNetworkDto>? SocialNetworks,
-    List<HelpRequisiteDto>? RequisitesForHelp);
-
 public record CreateVolunteerCommand(
     FullNameDto FullName,
     string Description,

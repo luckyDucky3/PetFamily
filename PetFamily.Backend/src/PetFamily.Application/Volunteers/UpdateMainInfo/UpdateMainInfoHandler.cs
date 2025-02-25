@@ -1,20 +1,12 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Database;
 using PetFamily.Application.Volunteers._Dto;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.UpdateMainInfo;
-
-public record UpdateMainInfoRequest(Guid Id, UpdateMainInfoDto Dto);
-
-public record UpdateMainInfoDto(
-    FullNameDto Fullname, 
-    string Description, 
-    string EmailAddress, 
-    string PhoneNumber,
-    int ExperienceYears);
     
 public record UpdateMainInfoCommand(
     Guid Id, 
@@ -29,13 +21,15 @@ public class UpdateMainInfoHandler
     private readonly IVolunteersRepository _volunteersRepository;
 
     private readonly ILogger<UpdateMainInfoHandler> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
     public UpdateMainInfoHandler(
         IVolunteersRepository volunteersRepository,
-        ILogger<UpdateMainInfoHandler> logger)
+        ILogger<UpdateMainInfoHandler> logger, IUnitOfWork unitOfWork)
     {
         _volunteersRepository = volunteersRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<Result<Guid, Error>> Handle(
@@ -62,10 +56,10 @@ public class UpdateMainInfoHandler
         
         volunteerResult.UpdateMainInfo(fullName, description, emailAddress, phoneNumber, experienceYears);
         
-        var result = await _volunteersRepository.Save(volunteerResult, cancellationToken);
+        await _unitOfWork.SaveChanges(cancellationToken);
         
         _logger.LogInformation("Volunteer has been successfully updated");
         
-        return Result.Success<Guid, Error>(result);
+        return Result.Success<Guid, Error>(volunteerId);
     }
 }

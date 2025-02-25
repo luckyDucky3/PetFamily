@@ -4,7 +4,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.HardDelete;
 
-public class HardDeleteVolunteerValidator : AbstractValidator<HardDeleteVolunteerRequest>
+public class HardDeleteVolunteerValidator : AbstractValidator<HardDeleteVolunteerCommand>
 {
     public HardDeleteVolunteerValidator()
     {

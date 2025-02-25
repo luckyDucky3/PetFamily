@@ -8,12 +8,13 @@ namespace PetFamily.Domain.Models.Entities.Volunteer;
 
 public sealed class Pet : SoftDeletableEntity<PetId>
 {
-
-    private Pet(PetId id) : base(id) { }
+    private Pet(PetId id) : base(id)
+    {
+    }
 
     public SerialNumber SerialNumber { get; private set; }
     public Volunteer Volunteer { get; private set; } = null!;
-    
+
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public SpeciesBreeds? SpeciesBreeds { get; private set; } = null!;
@@ -28,12 +29,14 @@ public sealed class Pet : SoftDeletableEntity<PetId>
     public DateTime BirthDate { get; private set; }
     public Status Status { get; private set; }
     public DateTime CreatedOn { get; private set; }
+    private List<PetFile> _files = [];
+    public IReadOnlyList<PetFile> Files => _files;
 
     private Pet(
         PetId petId, string name, SpeciesBreeds speciesBreeds,
         Color color, Address address, string description, string infoAboutHealth, double? weight,
         double? height, PhoneNumber? phoneNumber, bool isCastrate,
-        bool isVaccinate, DateTime birthDate, Status status) : this(petId)
+        bool isVaccinate, DateTime birthDate, Status status, IEnumerable<PetFile>? files = null) : this(petId)
     {
         Name = name;
         Description = description;
@@ -49,33 +52,37 @@ public sealed class Pet : SoftDeletableEntity<PetId>
         Status = status;
         BirthDate = birthDate;
         CreatedOn = DateTime.UtcNow;
+        if (files != null)
+            _files = files.ToList();
     }
 
     public static Result<Pet, Error> Create(
         PetId petId, string name, SpeciesBreeds speciesBreeds,
         Color color, Address address, string description = "", string infoAboutHealth = "",
         double? weight = null, double? height = null, PhoneNumber? phoneNumber = null,
-        bool isCastrate = false, bool isVaccinate = false, DateTime birthDate = default, Status status = Status.FindHome)
+        bool isCastrate = false, bool isVaccinate = false, DateTime birthDate = default,
+        Status status = Status.FindHome, IEnumerable<PetFile>? files = null)
     {
         if (string.IsNullOrWhiteSpace(name))
             return Result.Failure<Pet, Error>(Errors.General.IsRequired("Name"));
 
-        if (weight != null && weight < 0)
+        if (weight is < 0)
             return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Weight"));
 
-        if (height != null && height < 0)
+        if (height is < 0)
             return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Height"));
 
         if (birthDate < DateTime.MinValue || birthDate > DateTime.Now)
             return Result.Failure<Pet, Error>(Errors.General.IsInvalid("Birthdate"));
-
+        
         Pet pet = new Pet(petId, name, speciesBreeds,
             color, address, description, infoAboutHealth, weight,
             height, phoneNumber, isCastrate, isVaccinate,
-            birthDate, status);
-        
+            birthDate, status, files);
+
         return Result.Success<Pet, Error>(pet);
     }
+
     public void SetSerialNumber(SerialNumber serialNumber)
     {
         SerialNumber = serialNumber;

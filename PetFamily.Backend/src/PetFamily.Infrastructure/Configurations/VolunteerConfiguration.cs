@@ -68,9 +68,12 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             .IsRequired()
             .HasColumnName("phone_number");
 
-        builder.Property(v => v.HelpRequisites).JsonValueObjectCollectionConversion();
+        builder.Property(v => v.HelpRequisites)
+            .JsonValueObjectCollectionConversion()
+            .HasColumnName("help_requisites");
 
-        builder.Property(v => v.SocialNetworks).JsonValueObjectCollectionConversion();
+        builder.Property(v => v.SocialNetworks)
+            .JsonValueObjectCollectionConversion();
         
         builder.HasMany(v => v.Pets)
             .WithOne(p => p.Volunteer)
