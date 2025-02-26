@@ -5,8 +5,6 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.HardDelete;
 
-public record HardDeleteVolunteerRequest(Guid Id);
-
 public record HardDeleteVolunteerCommand(Guid Id);
 
 public class HardDeleteVolunteerHandler

@@ -25,6 +25,12 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired()
             .HasColumnName("pet_id");
 
+        builder.Property(p => p.SerialNumber)
+            .HasConversion(s => s.Value,
+                str => SerialNumber.Create(str).Value)
+            .IsRequired()
+            .HasColumnName("serial_number");
+        
         builder.Property(p => p.Name)
             .IsRequired()
             .HasMaxLength(Constants.MAX_SHORT_TEXT_LENGTH)
@@ -118,5 +124,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .SetDateTimeKind(DateTimeKind.Utc)
             .HasColumnName("deletion_date");
+        
+        builder.Property(p => p.Files)
+            .JsonValueObjectCollectionConversion()
+            .HasColumnName("files");
     }
 }

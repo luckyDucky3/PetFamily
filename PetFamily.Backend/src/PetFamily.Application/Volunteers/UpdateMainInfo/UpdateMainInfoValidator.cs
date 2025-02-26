@@ -6,7 +6,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.UpdateMainInfo;
 
-public class UpdateMainInfoValidator : AbstractValidator<UpdateMainInfoRequest>
+public class UpdateMainInfoValidator : AbstractValidator<UpdateMainInfoCommand>
 {
     public UpdateMainInfoValidator()
     {
@@ -14,7 +14,7 @@ public class UpdateMainInfoValidator : AbstractValidator<UpdateMainInfoRequest>
     }
 }
 
-public class UpdateMainInfoDtoValidator : AbstractValidator<UpdateMainInfoDto>
+public class UpdateMainInfoDtoValidator : AbstractValidator<UpdateMainInfoCommand>
 {
     public UpdateMainInfoDtoValidator()
     {

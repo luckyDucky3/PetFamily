@@ -6,7 +6,7 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.AddSocialNetworks;
 
-public class AddSocialNetworksValidator : AbstractValidator<AddSocialNetworksRequest>
+public class AddSocialNetworksValidator : AbstractValidator<AddSocialNetworksCommand>
 {
     public AddSocialNetworksValidator()
     {

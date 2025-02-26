@@ -8,7 +8,6 @@ using PetFamily.Domain.Shared;
 namespace PetFamily.Application.Volunteers.AddSocialNetworks;
 
 public record AddSocialNetworksCommand(Guid Id, List<SocialNetworkDto> SocialNetworkDtos);
-public record AddSocialNetworksRequest(Guid Id, ListSocialNetworkDto SocialNetworkDtos);
 
 public class AddSocialNetworksHandler
 {
