@@ -36,15 +36,4 @@ public class SpeciesRepository : ISpeciesRepository
         return specie;
     }
     
-    public async Task<bool> IsExist(
-        SpecieId specieId,
-        BreedId breedId,
-        CancellationToken cancellationToken = default)
-    {
-        var specie = await _dbContext.Species
-            .Include(s => s.Breeds)
-            .FirstOrDefaultAsync(s => s.Id == specieId, cancellationToken);
-        var breed = specie?.Breeds.FirstOrDefault(b => b.Id == breedId);
-        return specie != null && breed != null;
-    }
 }

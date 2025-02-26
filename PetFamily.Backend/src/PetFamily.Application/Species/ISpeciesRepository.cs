@@ -12,9 +12,4 @@ public interface ISpeciesRepository
     public Task<Specie?> GetById(
         SpecieId specieId,
         CancellationToken cancellationToken = default);
-
-    public Task<bool> IsExist(
-        SpecieId specieId,
-        BreedId breedId,
-        CancellationToken cancellationToken = default);
 }

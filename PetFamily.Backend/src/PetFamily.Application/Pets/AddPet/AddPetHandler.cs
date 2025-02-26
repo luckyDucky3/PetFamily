@@ -64,7 +64,11 @@ public class AddPetHandler
             PetId petId = PetId.NewPetId();
             SpecieId specieId = SpecieId.Create(command.SpecieId);
             BreedId breedId = BreedId.Create(command.BreedId);
-            var exist = await _speciesRepository.IsExist(specieId, breedId, cancellationToken);
+            var specie = await _speciesRepository.GetById(specieId, cancellationToken);
+            if (specie == null)
+                return Result.Failure<Guid, Error>(Errors.General.IsNotFound(command.SpecieId));
+
+            var exist = specie.IsBreedExist(breedId);
             if (!exist)
                 return Result.Failure<Guid, Error>(Errors.General.IsNotFound(command.BreedId));
             

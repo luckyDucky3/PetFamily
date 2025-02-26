@@ -27,4 +27,9 @@ public sealed class Specie : Entity<SpecieId>
         Specie specie = new Specie(specieId, specieName);
         return Result.Success<Specie, Error>(specie);
     }
+
+    public bool IsBreedExist(BreedId breedId)
+    {
+        return Breeds.Any(breed => breed.Id == breedId);
+    }
 }
