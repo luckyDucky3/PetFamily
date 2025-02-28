@@ -27,7 +27,7 @@ public class MinioProvider : IFileProvider
         IEnumerable<FileDataUpload> filesData,
         CancellationToken cancellationToken = default)
     {
-        SemaphoreSlim semaphoreSlim = new(MAX_DEGREE_OF_PARALLELISM);
+        using SemaphoreSlim semaphoreSlim = new(MAX_DEGREE_OF_PARALLELISM);
         var filesList = filesData.ToList();
 
         try
