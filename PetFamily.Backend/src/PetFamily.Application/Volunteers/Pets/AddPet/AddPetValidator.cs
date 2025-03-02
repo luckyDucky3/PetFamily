@@ -2,7 +2,7 @@ using FluentValidation;
 using PetFamily.Application.Volunteers._Validation;
 using PetFamily.Domain.Models.VO;
 
-namespace PetFamily.Application.Pets.AddPet;
+namespace PetFamily.Application.Volunteers.Pets.AddPet;
 
 public class AddPetValidator : AbstractValidator<AddPetCommand>
 {

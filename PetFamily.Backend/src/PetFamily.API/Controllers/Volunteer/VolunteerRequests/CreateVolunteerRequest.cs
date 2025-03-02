@@ -1,4 +1,5 @@
 using PetFamily.Application.Volunteers._Dto;
+using PetFamily.Application.Volunteers.Create;
 
 namespace PetFamily.API.Controllers.Volunteer.VolunteerRequests;
 
@@ -9,4 +10,15 @@ public record CreateVolunteerRequest(
     string EmailAddress,
     int ExperienceYears,
     List<SocialNetworkDto>? SocialNetworks,
-    List<HelpRequisiteDto>? RequisitesForHelp);
+    List<HelpRequisiteDto>? RequisitesForHelp)
+{
+    public CreateVolunteerCommand ToCommand()
+        => new CreateVolunteerCommand(
+            FullName,
+            Description,
+            PhoneNumber,
+            EmailAddress,
+            ExperienceYears, 
+            SocialNetworks,
+            RequisitesForHelp);
+};

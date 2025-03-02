@@ -1,11 +1,11 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.FileProvider;
-using PetFamily.Application.Pets.AddPet;
 using PetFamily.Application.Providers;
+using PetFamily.Application.Volunteers.Pets.AddPet;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Pets.RemovePet;
+namespace PetFamily.Application.Volunteers.Pets.RemovePet;
 
 public class RemovePetHandler
 {

@@ -1,18 +1,18 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.FileProvider;
-using PetFamily.Application.Pets.AddPet;
 using PetFamily.Application.Providers;
+using PetFamily.Application.Volunteers.Pets.AddPet;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Pets.GetPet;
+namespace PetFamily.Application.Volunteers.Pets.GetPet;
 
 public class GetPetHandler
 {
     private readonly IFileProvider _fileProvider;
-    private readonly ILogger<AddPetHandler> _logger;
+    private readonly ILogger<GetPetHandler> _logger;
 
-    public GetPetHandler(IFileProvider fileProvider, ILogger<AddPetHandler> logger)
+    public GetPetHandler(IFileProvider fileProvider, ILogger<GetPetHandler> logger)
     {
         _fileProvider = fileProvider;
         _logger = logger;

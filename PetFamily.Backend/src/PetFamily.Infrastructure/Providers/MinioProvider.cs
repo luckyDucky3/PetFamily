@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel;
@@ -13,21 +14,25 @@ namespace PetFamily.Infrastructure.Providers;
 
 public class MinioProvider : IFileProvider
 {
-    public const int MAX_DEGREE_OF_PARALLELISM = 5;
+    private const string MAX_DEGREE = "Minio:MaxDegreeOfParallelism";
+    
     private readonly IMinioClient _minioClient;
     private readonly ILogger<MinioProvider> _logger;
+    private static IConfiguration _configuration = null!;
+    private static readonly int MaxDegreeOfParallelism = _configuration.GetValue<int>(MAX_DEGREE);
 
-    public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger)
+    public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger, IConfiguration configuration)
     {
         _minioClient = minioClient;
         _logger = logger;
+        _configuration = configuration;
     }
 
     public async Task<Result<IReadOnlyList<FilePath>, Error>> UploadFiles(
         IEnumerable<FileDataUpload> filesData,
         CancellationToken cancellationToken = default)
     {
-        using SemaphoreSlim semaphoreSlim = new(MAX_DEGREE_OF_PARALLELISM);
+        using SemaphoreSlim semaphoreSlim = new(MaxDegreeOfParallelism);
         var filesList = filesData.ToList();
 
         try
@@ -43,7 +48,9 @@ public class MinioProvider : IFileProvider
                 return pathsResult.First().Error;
 
             var results = pathsResult.Select(p => p.Value).ToList();
-
+            
+            _logger.LogInformation("Uploaded fies: {files}", results.Select(r => r.PathToStorage));
+            
             return results;
         }
         catch (Exception ex)

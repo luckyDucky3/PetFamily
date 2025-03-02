@@ -110,6 +110,14 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
             IsDeleted = false;
     }
 
+    public Result<Pet, Error> GetPetById(Guid petId)
+    {
+        var pet = Pets.FirstOrDefault(p => p.Id == petId);
+        if (pet == null)
+            return Errors.General.IsNotFound(petId);
+        return pet;
+    }
+    
     public UnitResult<Error> AddPet(Pet pet)
     {
         var serialNumberResult = SerialNumber.Create(_pets.Count + 1);

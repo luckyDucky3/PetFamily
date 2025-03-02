@@ -21,9 +21,7 @@ public class HardDeleteBackgroundService : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("Background task running at: {time}", DateTimeOffset.Now);
-            
-            
-            
+            throw new NotImplementedException();
         }
     }
 }

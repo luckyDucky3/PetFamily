@@ -87,4 +87,7 @@ public sealed class Pet : SoftDeletableEntity<PetId>
     {
         SerialNumber = serialNumber;
     }
+
+    public void UpdateFiles(List<PetFile> petFiles)
+        => _files = petFiles;
 }
