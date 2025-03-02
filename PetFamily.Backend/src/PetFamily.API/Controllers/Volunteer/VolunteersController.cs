@@ -32,7 +32,6 @@ public class VolunteersController : ControllerBase
         var createVolunteerCommand = createVolunteerRequest.ToCommand();
 
         var result = await createVolunteerHandler.Handle(createVolunteerCommand, cancellationToken);
-
         if (result.IsFailure)
             return result.Error.ToResponse();
 

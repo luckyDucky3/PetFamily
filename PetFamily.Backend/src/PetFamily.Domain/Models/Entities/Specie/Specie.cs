@@ -22,12 +22,17 @@ public sealed class Specie : Entity<SpecieId>
     public static Result<Specie, Error> Create(SpecieId specieId, string specieName)
     {
         if (string.IsNullOrWhiteSpace(specieName))
-            return Result.Failure<Specie, Error>(Errors.General.IsRequired("Specie name"));
+            return Errors.General.IsRequired("Specie name");
         
         Specie specie = new Specie(specieId, specieName);
-        return Result.Success<Specie, Error>(specie);
+        return specie;
     }
 
+    public UnitResult<Error> AddBreeds(IEnumerable<Breed> breeds)
+    {
+        _breeds.AddRange(breeds);
+        return new UnitResult<Error>();
+    }
     public bool IsBreedExist(BreedId breedId)
     {
         return Breeds.Any(breed => breed.Id == breedId);
