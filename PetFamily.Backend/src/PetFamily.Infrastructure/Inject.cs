@@ -9,7 +9,7 @@ using PetFamily.Application.Volunteers;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Repositories;
-using IFileProvider = PetFamily.Application.Providers.IFileProvider;
+using IFileProvider = PetFamily.Application.FileProvider.IFileProvider;
 
 namespace PetFamily.Infrastructure;
 

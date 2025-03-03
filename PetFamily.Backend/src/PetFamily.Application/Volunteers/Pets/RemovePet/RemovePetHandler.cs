@@ -1,7 +1,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.FileProvider;
-using PetFamily.Application.Providers;
 using PetFamily.Application.Volunteers.Pets.AddPet;
 using PetFamily.Domain.Shared;
 

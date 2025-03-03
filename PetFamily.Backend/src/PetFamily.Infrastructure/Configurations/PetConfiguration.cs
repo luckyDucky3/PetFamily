@@ -25,9 +25,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired()
             .HasColumnName("pet_id");
 
-        builder.Property(p => p.SerialNumber)
+        builder.Property(p => p.Position)
             .HasConversion(s => s.Value,
-                str => SerialNumber.Create(str).Value)
+                str => Position.Create(str).Value)
             .IsRequired()
             .HasColumnName("serial_number");
         

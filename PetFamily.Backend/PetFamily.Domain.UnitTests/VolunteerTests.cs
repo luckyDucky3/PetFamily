@@ -22,7 +22,7 @@ public class VolunteerTests
         
         //assert
         Assert.True(result.IsSuccess);
-        Assert.Equal(volunteer.Pets[0].SerialNumber.Value, firstPet);
+        Assert.Equal(volunteer.Pets[0].Position.Value, firstPet);
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class VolunteerTests
         
         //assert
         result.IsSuccess.Should().BeTrue();
-        volunteer.Pets[^1].SerialNumber.Value.Should().Be(volunteer.Pets.Count);
+        volunteer.Pets[^1].Position.Value.Should().Be(volunteer.Pets.Count);
     }
 
     [Fact]
@@ -61,8 +61,8 @@ public class VolunteerTests
         var result = volunteer.MovePet(pet, 2);
         
         result.IsSuccess.Should().BeTrue();
-        volunteer.Pets[1].SerialNumber.Value.Should().Be(3);
-        volunteer.Pets[2].SerialNumber.Value.Should().Be(2);
+        volunteer.Pets[1].Position.Value.Should().Be(3);
+        volunteer.Pets[2].Position.Value.Should().Be(2);
     }
 
     [Fact]
@@ -75,18 +75,18 @@ public class VolunteerTests
         foreach (var p in pets)
             volunteer.AddPet(p);
         var pet = volunteer.Pets[8];
-        var currentPosition = pet.SerialNumber.Value;
+        var currentPosition = pet.Position.Value;
         int position = 3;
         var result = volunteer.MovePet(pet, position);
         //получаем список повторов (их быть не должно)
-        var repeats = volunteer.Pets.GroupBy(p => p.SerialNumber).Where(g => g.Count() > 1).ToList();
-        int maxSerialNumber = volunteer.Pets.Max(p => p.SerialNumber.Value);
-        int minSerialNumber = volunteer.Pets.Min(p => p.SerialNumber.Value);
+        var repeats = volunteer.Pets.GroupBy(p => p.Position).Where(g => g.Count() > 1).ToList();
+        int maxSerialNumber = volunteer.Pets.Max(p => p.Position.Value);
+        int minSerialNumber = volunteer.Pets.Min(p => p.Position.Value);
         
         result.IsSuccess.Should().BeTrue();
         repeats.Count.Should().Be(0);
-        volunteer.Pets[currentPosition - 1].SerialNumber.Value.Should().Be(position);
-        volunteer.Pets[position - 1].SerialNumber.Value.Should().Be(position + 1);
+        volunteer.Pets[currentPosition - 1].Position.Value.Should().Be(position);
+        volunteer.Pets[position - 1].Position.Value.Should().Be(position + 1);
         maxSerialNumber.Should().Be(pets.Count());
         minSerialNumber.Should().Be(1);
     }
@@ -101,18 +101,18 @@ public class VolunteerTests
         foreach (var p in pets)
             volunteer.AddPet(p);
         var pet = volunteer.Pets[1];
-        var currentPosition = pet.SerialNumber.Value;
+        var currentPosition = pet.Position.Value;
         int position = 9;
         var result = volunteer.MovePet(pet, position);
         //получаем список повторов (их быть не должно)
-        var repeats = volunteer.Pets.GroupBy(p => p.SerialNumber).Where(g => g.Count() > 1).ToList();
-        int maxSerialNumber = volunteer.Pets.Max(p => p.SerialNumber.Value);
-        int minSerialNumber = volunteer.Pets.Min(p => p.SerialNumber.Value);
+        var repeats = volunteer.Pets.GroupBy(p => p.Position).Where(g => g.Count() > 1).ToList();
+        int maxSerialNumber = volunteer.Pets.Max(p => p.Position.Value);
+        int minSerialNumber = volunteer.Pets.Min(p => p.Position.Value);
         
         result.IsSuccess.Should().BeTrue();
         repeats.Count.Should().Be(0);
-        volunteer.Pets[currentPosition - 1].SerialNumber.Value.Should().Be(position);
-        volunteer.Pets[currentPosition].SerialNumber.Value.Should().Be(currentPosition);
+        volunteer.Pets[currentPosition - 1].Position.Value.Should().Be(position);
+        volunteer.Pets[currentPosition].Position.Value.Should().Be(currentPosition);
         maxSerialNumber.Should().Be(pets.Count());
         minSerialNumber.Should().Be(1);
     }
@@ -126,18 +126,18 @@ public class VolunteerTests
         foreach (var p in pets)
             volunteer.AddPet(p);
         var pet = volunteer.Pets[6];
-        var currentPosition = pet.SerialNumber.Value;
+        var currentPosition = pet.Position.Value;
         int position = 10;
         var result = volunteer.MovePet(pet, position);
         //получаем список повторов (их быть не должно)
-        var repeats = volunteer.Pets.GroupBy(p => p.SerialNumber).Where(g => g.Count() > 1).ToList();
-        int maxSerialNumber = volunteer.Pets.Max(p => p.SerialNumber.Value);
-        int minSerialNumber = volunteer.Pets.Min(p => p.SerialNumber.Value);
+        var repeats = volunteer.Pets.GroupBy(p => p.Position).Where(g => g.Count() > 1).ToList();
+        int maxSerialNumber = volunteer.Pets.Max(p => p.Position.Value);
+        int minSerialNumber = volunteer.Pets.Min(p => p.Position.Value);
         
         result.IsSuccess.Should().BeTrue();
         repeats.Count.Should().Be(0);
-        volunteer.Pets[currentPosition - 1].SerialNumber.Value.Should().Be(position);
-        volunteer.Pets[currentPosition].SerialNumber.Value.Should().Be(currentPosition);
+        volunteer.Pets[currentPosition - 1].Position.Value.Should().Be(position);
+        volunteer.Pets[currentPosition].Position.Value.Should().Be(currentPosition);
         maxSerialNumber.Should().Be(pets.Count());
         minSerialNumber.Should().Be(1);
     }
@@ -151,18 +151,18 @@ public class VolunteerTests
         foreach (var p in pets)
             volunteer.AddPet(p);
         var pet = volunteer.Pets[5];
-        var currentPosition = pet.SerialNumber.Value;
+        var currentPosition = pet.Position.Value;
         int position = 1;
         var result = volunteer.MovePet(pet, position);
         //получаем список повторов (их быть не должно)
-        var repeats = volunteer.Pets.GroupBy(p => p.SerialNumber).Where(g => g.Count() > 1).ToList();
-        int maxSerialNumber = volunteer.Pets.Max(p => p.SerialNumber.Value);
-        int minSerialNumber = volunteer.Pets.Min(p => p.SerialNumber.Value);
+        var repeats = volunteer.Pets.GroupBy(p => p.Position).Where(g => g.Count() > 1).ToList();
+        int maxSerialNumber = volunteer.Pets.Max(p => p.Position.Value);
+        int minSerialNumber = volunteer.Pets.Min(p => p.Position.Value);
         
         result.IsSuccess.Should().BeTrue();
         repeats.Count.Should().Be(0);
-        volunteer.Pets[currentPosition - 1].SerialNumber.Value.Should().Be(position);
-        volunteer.Pets[position - 1].SerialNumber.Value.Should().Be(position + 1);
+        volunteer.Pets[currentPosition - 1].Position.Value.Should().Be(position);
+        volunteer.Pets[position - 1].Position.Value.Should().Be(position + 1);
         maxSerialNumber.Should().Be(pets.Count());
         minSerialNumber.Should().Be(1);
     }

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.FileProvider;
-using PetFamily.Application.Providers;
 using PetFamily.Application.Volunteers.Pets.PetDtos;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;

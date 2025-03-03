@@ -1,9 +1,8 @@
 using CSharpFunctionalExtensions;
-using PetFamily.Application.FileProvider;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Providers;
+namespace PetFamily.Application.FileProvider;
 
 public interface IFileProvider
 {

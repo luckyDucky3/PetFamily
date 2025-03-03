@@ -3,7 +3,6 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
-using PetFamily.Application.Providers;
 using PetFamily.Application.Species;
 using PetFamily.Application.Volunteers.Pets.PetDtos;
 using PetFamily.Domain.Enums;

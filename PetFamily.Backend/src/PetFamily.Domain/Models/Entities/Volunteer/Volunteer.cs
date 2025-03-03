@@ -9,7 +9,9 @@ namespace PetFamily.Domain.Models.Entities.Volunteer;
 public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
 {
     //EF
-    private Volunteer(VolunteerId id) : base(id) { }
+    private Volunteer(VolunteerId id) : base(id)
+    {
+    }
 
     public FullName Name { get; private set; } = null!;
     public EmailAddress Email { get; private set; } = null!;
@@ -30,11 +32,11 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
     public IReadOnlyList<Pet> Pets => _pets;
 
     public static Result<Volunteer, Error> Create(
-        VolunteerId id, 
-        FullName fullName, 
-        string description, 
-        EmailAddress emailAddress, 
-        PhoneNumber phoneNumber, 
+        VolunteerId id,
+        FullName fullName,
+        string description,
+        EmailAddress emailAddress,
+        PhoneNumber phoneNumber,
         int experienceYears)
     {
         Volunteer volunteer = new Volunteer(
@@ -45,10 +47,10 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
 
     private Volunteer(
         VolunteerId id,
-        FullName fullName, 
-        string description, 
-        EmailAddress emailAddress, 
-        PhoneNumber phoneNumber, 
+        FullName fullName,
+        string description,
+        EmailAddress emailAddress,
+        PhoneNumber phoneNumber,
         int experienceYears) : base(id)
     {
         Name = fullName;
@@ -63,24 +65,24 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
 
     public void AddHelpRequisites(List<HelpRequisite> helpRequisites)
         => _helpRequisites.AddRange(helpRequisites);
-    
+
     public void UpdateSocialNetworks(List<SocialNetwork> socialNetworks)
     {
         _socialNetworks.Clear();
         _socialNetworks.AddRange(socialNetworks);
     }
-    
+
     public void UpdateHelpRequisites(List<HelpRequisite> helpRequisites)
     {
         _helpRequisites.Clear();
         _helpRequisites.AddRange(helpRequisites);
     }
-    
+
     public void UpdateMainInfo(
-        FullName fullName, 
-        string description, 
-        EmailAddress emailAddress, 
-        PhoneNumber phoneNumber, 
+        FullName fullName,
+        string description,
+        EmailAddress emailAddress,
+        PhoneNumber phoneNumber,
         int experienceYears)
     {
         Name = fullName;
@@ -97,7 +99,7 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
             IsDeleted = true;
             DeletionDate = DateTime.UtcNow;
         }
-        
+
         foreach (var pet in Pets)
         {
             pet.Deactivate();
@@ -117,37 +119,43 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
             return Errors.General.IsNotFound(petId);
         return pet;
     }
-    
+
     public UnitResult<Error> AddPet(Pet pet)
     {
-        var serialNumberResult = SerialNumber.Create(_pets.Count + 1);
+        var serialNumberResult = Position.Create(_pets.Count + 1);
         if (serialNumberResult.IsFailure)
             UnitResult.Failure(serialNumberResult.Error);
-        pet.SetSerialNumber(serialNumberResult.Value);
+        pet.SetPosition(serialNumberResult.Value);
         _pets.Add(pet);
         return UnitResult.Success<Error>();
     }
-    
-    public UnitResult<Error> MovePet (Pet pet, int position)
+
+    public UnitResult<Error> MovePet(Pet pet, int newPosition)
     {
-        if (position > _pets.Count || position < 0)
+        if (newPosition > _pets.Count || newPosition < 0)
             return UnitResult.Failure(Error.Validation("position.invalid", "Pet position is out of range"));
 
-        if (position < pet.SerialNumber.Value)
+        int currentPosition = pet.Position.Value;
+
+        if (newPosition < currentPosition)
         {
-            for (int i = position - 1; i < pet.SerialNumber.Value - 1; i++)
-            {
-                _pets[i].SetSerialNumber(SerialNumber.Create(_pets[i].SerialNumber.Value + 1).Value);
-            }
+            var petsToMove = _pets.Where(p => p.Position.Value >= newPosition 
+                                              && p.Position.Value < currentPosition);
+
+            foreach (var petToMove in petsToMove)
+                Position.Forward(petToMove);
         }
         else
         {
-            for (int i = pet.SerialNumber.Value; i < position; i++)
-            {
-                _pets[i].SetSerialNumber(SerialNumber.Create(_pets[i].SerialNumber.Value - 1).Value);
-            }
+            var petsToMove = _pets.Where(p => p.Position.Value >= currentPosition 
+                                              && p.Position.Value < newPosition);
+            
+            foreach (var petToMove in petsToMove)
+                Position.Backward(petToMove);
         }
-        pet.SetSerialNumber(SerialNumber.Create(position).Value);
+        
+        Position.SetNewPosition(pet, newPosition);
+        
         return UnitResult.Success<Error>();
     }
 }

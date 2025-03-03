@@ -6,7 +6,6 @@ using Minio.DataModel;
 using Minio.DataModel.Args;
 using Minio.DataModel.Response;
 using PetFamily.Application.FileProvider;
-using PetFamily.Application.Providers;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
@@ -18,14 +17,13 @@ public class MinioProvider : IFileProvider
     
     private readonly IMinioClient _minioClient;
     private readonly ILogger<MinioProvider> _logger;
-    private static IConfiguration _configuration = null!;
-    private static readonly int MaxDegreeOfParallelism = _configuration.GetValue<int>(MAX_DEGREE);
+    private readonly int MaxDegreeOfParallelism;
 
     public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger, IConfiguration configuration)
     {
         _minioClient = minioClient;
         _logger = logger;
-        _configuration = configuration;
+        MaxDegreeOfParallelism = configuration.GetValue<int>(MAX_DEGREE);
     }
 
     public async Task<Result<IReadOnlyList<FilePath>, Error>> UploadFiles(
