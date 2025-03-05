@@ -50,12 +50,7 @@ public class VolunteerTests
     [Fact]
     public void Move_Pet_On_Next_Field_Returns_Success()
     {
-        var volunteer = CreateStandartVolunteer();
-        var pets = Enumerable.Range(1, 5)
-            .Select(_ => CreateStandartPet());
-        
-        foreach (var p in pets)
-            volunteer.AddPet(p);
+        var volunteer = CreateVolunteerWithPets();
         var pet = volunteer.Pets[2];
 
         var result = volunteer.MovePet(pet, 2);
@@ -68,12 +63,7 @@ public class VolunteerTests
     [Fact]
     public void Move_Pet_Across_Many_Fields_By_The_Start_Returns_Success()
     {
-        var volunteer = CreateStandartVolunteer();
-        var pets = Enumerable.Range(1, 10)
-            .Select(_ => CreateStandartPet());
-        
-        foreach (var p in pets)
-            volunteer.AddPet(p);
+        var volunteer = CreateVolunteerWithPets();
         var pet = volunteer.Pets[8];
         var currentPosition = pet.Position.Value;
         int position = 3;
@@ -87,19 +77,14 @@ public class VolunteerTests
         repeats.Count.Should().Be(0);
         volunteer.Pets[currentPosition - 1].Position.Value.Should().Be(position);
         volunteer.Pets[position - 1].Position.Value.Should().Be(position + 1);
-        maxSerialNumber.Should().Be(pets.Count());
+        maxSerialNumber.Should().Be(volunteer.Pets.Count());
         minSerialNumber.Should().Be(1);
     }
     
     [Fact]
     public void Move_Pet_Across_Many_Fields_By_The_End_Returns_Success()
     {
-        var volunteer = CreateStandartVolunteer();
-        var pets = Enumerable.Range(1, 10)
-            .Select(_ => CreateStandartPet());
-        
-        foreach (var p in pets)
-            volunteer.AddPet(p);
+        var volunteer = CreateVolunteerWithPets();
         var pet = volunteer.Pets[1];
         var currentPosition = pet.Position.Value;
         int position = 9;
@@ -113,18 +98,13 @@ public class VolunteerTests
         repeats.Count.Should().Be(0);
         volunteer.Pets[currentPosition - 1].Position.Value.Should().Be(position);
         volunteer.Pets[currentPosition].Position.Value.Should().Be(currentPosition);
-        maxSerialNumber.Should().Be(pets.Count());
+        maxSerialNumber.Should().Be(volunteer.Pets.Count());
         minSerialNumber.Should().Be(1);
     }
     [Fact]
     public void Move_Pet_In_The_End_Returns_Success()
     {
-        var volunteer = CreateStandartVolunteer();
-        var pets = Enumerable.Range(1, 10)
-            .Select(_ => CreateStandartPet());
-        
-        foreach (var p in pets)
-            volunteer.AddPet(p);
+        var volunteer = CreateVolunteerWithPets();
         var pet = volunteer.Pets[6];
         var currentPosition = pet.Position.Value;
         int position = 10;
@@ -138,18 +118,13 @@ public class VolunteerTests
         repeats.Count.Should().Be(0);
         volunteer.Pets[currentPosition - 1].Position.Value.Should().Be(position);
         volunteer.Pets[currentPosition].Position.Value.Should().Be(currentPosition);
-        maxSerialNumber.Should().Be(pets.Count());
+        maxSerialNumber.Should().Be(volunteer.Pets.Count);
         minSerialNumber.Should().Be(1);
     }
     [Fact]
     public void Move_Pet_In_The_Start_Returns_Success()
     {
-        var volunteer = CreateStandartVolunteer();
-        var pets = Enumerable.Range(1, 10)
-            .Select(_ => CreateStandartPet());
-        
-        foreach (var p in pets)
-            volunteer.AddPet(p);
+        var volunteer = CreateVolunteerWithPets();
         var pet = volunteer.Pets[5];
         var currentPosition = pet.Position.Value;
         int position = 1;
@@ -163,8 +138,19 @@ public class VolunteerTests
         repeats.Count.Should().Be(0);
         volunteer.Pets[currentPosition - 1].Position.Value.Should().Be(position);
         volunteer.Pets[position - 1].Position.Value.Should().Be(position + 1);
-        maxSerialNumber.Should().Be(pets.Count());
+        maxSerialNumber.Should().Be(volunteer.Pets.Count());
         minSerialNumber.Should().Be(1);
+    }
+
+    private Volunteer CreateVolunteerWithPets()
+    {
+        var volunteer = CreateStandartVolunteer();
+        var pets = Enumerable.Range(1, 10)
+            .Select(_ => CreateStandartPet());
+        foreach (var p in pets)
+            volunteer.AddPet(p);
+        
+        return volunteer;
     }
     private Volunteer CreateStandartVolunteer()
     {

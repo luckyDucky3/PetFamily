@@ -135,8 +135,17 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
         if (newPosition > _pets.Count || newPosition < 0)
             return UnitResult.Failure(Error.Validation("position.invalid", "Pet position is out of range"));
 
-        int currentPosition = pet.Position.Value;
+        var error = MovePetsBetweenPosition(pet, newPosition);
+        if (error.IsFailure)
+            return error;
 
+        return UnitResult.Success<Error>();
+    }
+
+    private UnitResult<Error> MovePetsBetweenPosition(Pet pet, int newPosition)
+    {
+        int currentPosition = pet.Position.Value;
+        
         if (newPosition < currentPosition)
         {
             var petsToMove = _pets.Where(p => p.Position.Value >= newPosition 
@@ -147,13 +156,13 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
         }
         else
         {
-            var petsToMove = _pets.Where(p => p.Position.Value >= currentPosition 
-                                              && p.Position.Value < newPosition);
+            var petsToMove = _pets.Where(p => p.Position.Value > currentPosition 
+                                              && p.Position.Value <= newPosition);
             
             foreach (var petToMove in petsToMove)
                 Position.Backward(petToMove);
         }
-        
+
         Position.SetNewPosition(pet, newPosition);
         
         return UnitResult.Success<Error>();
