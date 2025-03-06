@@ -6,9 +6,11 @@ using Minio.Credentials;
 using PetFamily.Application.Database;
 using PetFamily.Application.Species;
 using PetFamily.Application.Volunteers;
+using PetFamily.Infrastructure.MessageQueues;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Repositories;
+using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 using IFileProvider = PetFamily.Application.FileProvider.IFileProvider;
 
 namespace PetFamily.Infrastructure;
@@ -24,6 +26,8 @@ public static class Inject
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddMinio(configuration);
+
+        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, FilesCleanerMessageQueue>();
 
         return services;
     }
@@ -43,7 +47,7 @@ public static class Inject
             options.WithSSL(minioOptions.WithSSL);
         });
         services.AddScoped<IFileProvider, MinioProvider>();
-        
+
         return services;
     }
 }

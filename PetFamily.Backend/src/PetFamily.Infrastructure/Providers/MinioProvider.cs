@@ -2,12 +2,11 @@ using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Minio;
-using Minio.DataModel;
 using Minio.DataModel.Args;
-using Minio.DataModel.Response;
 using PetFamily.Application.FileProvider;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
+using PetFamily.Infrastructure.MessageQueues;
 using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.Infrastructure.Providers;
@@ -18,21 +17,28 @@ public class MinioProvider : IFileProvider
     
     private readonly IMinioClient _minioClient;
     private readonly ILogger<MinioProvider> _logger;
-    private readonly int MaxDegreeOfParallelism;
+    private readonly IMessageQueue<IEnumerable<FileInfo>> _messageQueue;
+    private readonly int _maxDegreeOfParallelism;
 
-    public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger, IConfiguration configuration)
+    public MinioProvider(
+        IMinioClient minioClient, 
+        ILogger<MinioProvider> logger,
+        IConfiguration configuration,
+        IMessageQueue<IEnumerable<FileInfo>> messageQueue)
     {
         _minioClient = minioClient;
         _logger = logger;
-        MaxDegreeOfParallelism = configuration.GetValue<int>(MAX_DEGREE);
+        _messageQueue = messageQueue;
+        _maxDegreeOfParallelism = configuration.GetValue<int>(MAX_DEGREE);
     }
 
     public async Task<Result<IReadOnlyList<FilePath>, Error>> UploadFiles(
         IEnumerable<FileData> filesData,
         CancellationToken cancellationToken = default)
     {
-        using SemaphoreSlim semaphoreSlim = new(MaxDegreeOfParallelism);
-        var filesList = filesData.ToList();
+        using SemaphoreSlim semaphoreSlim = new(_maxDegreeOfParallelism);
+        var dataList = filesData.ToList();
+        var filesList = dataList.ToList();
 
         try
         {
@@ -54,6 +60,8 @@ public class MinioProvider : IFileProvider
         }
         catch (Exception ex)
         {
+            await _messageQueue.WriteAsync(dataList.Select(f => f.FileInfo), cancellationToken);
+            
             _logger.LogError(ex,
                 "Fail to upload files in minio, files amount: {amount}", filesList.Count);
 
@@ -69,6 +77,12 @@ public class MinioProvider : IFileProvider
     {
         try
         {
+            var statArgs = new StatObjectArgs()
+                .WithBucket(fileInfo.BucketName)
+                .WithObject(fileInfo.FilePath.PathToStorage);
+            if (statArgs == null)
+                return Result.Success<string, Error>(fileInfo.FilePath.PathToStorage);
+
             var removeObjectArgs = new RemoveObjectArgs()
                 .WithBucket(fileInfo.BucketName)
                 .WithObject(fileInfo.FilePath.PathToStorage);
