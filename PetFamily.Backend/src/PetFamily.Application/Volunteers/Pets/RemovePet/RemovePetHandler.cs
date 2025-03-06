@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using PetFamily.Application.FileProvider;
 using PetFamily.Application.Volunteers.Pets.AddPet;
 using PetFamily.Domain.Shared;
+using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.Application.Volunteers.Pets.RemovePet;
 
@@ -17,7 +18,7 @@ public class RemovePetHandler
         _logger = logger;
     }
 
-    public async Task<Result<string, Error>> Handle(FileDataRemove fileData, CancellationToken cancellationToken)
+    public async Task<Result<string, Error>> Handle(FileInfo fileData, CancellationToken cancellationToken)
     {
         return await _fileProvider.DeleteFile(fileData, cancellationToken);
     }

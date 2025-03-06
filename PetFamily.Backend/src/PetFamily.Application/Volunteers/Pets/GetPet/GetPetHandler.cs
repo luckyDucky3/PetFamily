@@ -1,8 +1,8 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.FileProvider;
-using PetFamily.Application.Volunteers.Pets.AddPet;
 using PetFamily.Domain.Shared;
+using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.Application.Volunteers.Pets.GetPet;
 
@@ -17,8 +17,8 @@ public class GetPetHandler
         _logger = logger;
     }
 
-    public async Task<Result<string, Error>> Handle(FileDataGet fileData, CancellationToken cancellationToken)
+    public async Task<Result<string, Error>> Handle(FileInfo fileInfo, CancellationToken cancellationToken)
     {
-        return await _fileProvider.GetFile(fileData, cancellationToken);
+        return await _fileProvider.GetFile(fileInfo, cancellationToken);
     }
 }

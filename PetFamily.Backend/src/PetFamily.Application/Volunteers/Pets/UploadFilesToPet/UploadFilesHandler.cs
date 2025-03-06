@@ -8,6 +8,7 @@ using PetFamily.Application.Volunteers.Pets.PetDtos;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
+using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.Application.Volunteers.Pets.UploadFilesToPet;
 
@@ -54,7 +55,7 @@ public class UploadFilesHandler
 
         var pet = petResult.Value;
 
-        List<FileDataUpload> fileDataUploads = [];
+        List<FileData> fileDataUploads = [];
         foreach (var file in command.Files)
         {
             var extension = Path.GetExtension(file.FileName);
@@ -63,8 +64,8 @@ public class UploadFilesHandler
             if (filePath.IsFailure)
                 return filePath.Error.ToErrorList();
 
-            var fileDataUpload = new FileDataUpload(file.Stream, filePath.Value, BUCKET_NAME);
-            fileDataUploads.Add(fileDataUpload);
+            var fileData = new FileData(file.Stream, new FileInfo(filePath.Value, BUCKET_NAME));
+            fileDataUploads.Add(fileData);
         }
 
         var filePathsResult = await _fileProvider.UploadFiles(fileDataUploads, cancellationToken);

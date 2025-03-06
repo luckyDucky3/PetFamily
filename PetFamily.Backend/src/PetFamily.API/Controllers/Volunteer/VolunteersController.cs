@@ -15,6 +15,7 @@ using PetFamily.Application.Volunteers.Pets.RemovePet;
 using PetFamily.Application.Volunteers.Pets.UploadFilesToPet;
 using PetFamily.Application.Volunteers.SoftDelete;
 using PetFamily.Application.Volunteers.UpdateMainInfo;
+using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.API.Controllers.Volunteer;
 
@@ -158,11 +159,11 @@ public class VolunteersController : ControllerBase
 
     [HttpDelete("test-method")]
     public async Task<IActionResult> DeleteFile(
-        [FromBody] FileDataRemove fileDataRemove,
+        [FromBody] FileInfo fileInfo,
         [FromServices] RemovePetHandler removePetHandler,
         CancellationToken cancellationToken = default)
     {
-        var result = await removePetHandler.Handle(fileDataRemove, cancellationToken);
+        var result = await removePetHandler.Handle(fileInfo, cancellationToken);
         if (result.IsFailure)
             return result.Error.ToResponse();
 
@@ -171,11 +172,11 @@ public class VolunteersController : ControllerBase
 
     [HttpGet("test-method")]
     public async Task<IActionResult> GetFile(
-        [FromQuery] FileDataGet fileDataGet,
+        [FromQuery] FileInfo fileInfo,
         [FromServices] GetPetHandler getPetHandler,
         CancellationToken cancellationToken = default)
     {
-        var result = await getPetHandler.Handle(fileDataGet, cancellationToken);
+        var result = await getPetHandler.Handle(fileInfo, cancellationToken);
         if (result.IsFailure)
             return result.Error.ToResponse();
 

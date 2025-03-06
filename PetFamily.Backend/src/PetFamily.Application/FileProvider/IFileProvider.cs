@@ -6,14 +6,14 @@ namespace PetFamily.Application.FileProvider;
 
 public interface IFileProvider
 {
-    public Task<Result<IReadOnlyList<FilePath>, Error>> UploadFiles(IEnumerable<FileDataUpload> filesData,
+    public Task<Result<IReadOnlyList<FilePath>, Error>> UploadFiles(IEnumerable<FileData> filesData,
         CancellationToken cancellationToken = default);
 
     public Task<Result<string, Error>> DeleteFile(
-        FileDataRemove fileDataRemove,
+        FileInfo fileInfo,
         CancellationToken cancellationToken = default);
 
     public Task<Result<string, Error>> GetFile(
-        FileDataGet fileDataGet,
+        FileInfo fileInfo,
         CancellationToken cancellationToken = default);
 }
