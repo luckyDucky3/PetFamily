@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.Data;
 using CSharpFunctionalExtensions;
 using FluentAssertions;
 using FluentValidation;
@@ -22,6 +20,11 @@ namespace PetFamily.Application.UnitTests;
 
 public class UnitTest1
 {
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+    private readonly Mock<IFileProvider> _fileProviderMock = new();
+    private readonly Mock<ILogger<UploadFilesHandler>> _loggerMock = new();
+    private readonly Mock<IVolunteersRepository> _volunteerRepositoryMock = new();
+
     [Fact]
     public async void Handle_Should_Upload_Files_To_Pet()
     {
@@ -53,7 +56,6 @@ public class UnitTest1
         var uploadFileDto = new UploadFileDto(stream, fileName);
         List<UploadFileDto> files = [uploadFileDto, uploadFileDto, uploadFileDto];
         var command = new UploadFilesToPetCommand(volunteerId, petId, files);
-        var fileProviderMock = new Mock<IFileProvider>();
 
         IReadOnlyList<FilePath> filePaths =
         [
@@ -62,20 +64,16 @@ public class UnitTest1
             FilePath.Create(Guid.NewGuid(), Path.GetExtension(fileName)).Value
         ];
 
-        fileProviderMock
-            .Setup(v => v.UploadFiles(It.IsAny<List<FileDataUpload>>(), cancellationToken))
+        _fileProviderMock
+            .Setup(v => v.UploadFiles(It.IsAny<List<FileData>>(), cancellationToken))
             .ReturnsAsync(Result.Success<IReadOnlyList<FilePath>, Error>(filePaths));
-
-        var loggerMock = new Mock<ILogger<UploadFilesHandler>>();
-        //loggerMock.Setup(l => l.LogInformation(""));
-
-        var volunteerRepositoryMock = new Mock<IVolunteersRepository>();
-        volunteerRepositoryMock
+        
+        _volunteerRepositoryMock
             .Setup(v => v.GetById(It.IsAny<VolunteerId>(), cancellationToken))
             .ReturnsAsync(volunteer.Value);
 
         var unitOfWorkMock = new Mock<IUnitOfWork>();
-        unitOfWorkMock.Setup(u => u.SaveChanges(cancellationToken))
+        _unitOfWorkMock.Setup(u => u.SaveChanges(cancellationToken))
             .Returns(Task.CompletedTask);
 
         var validatorMock = new Mock<IValidator<UploadFilesToPetCommand>>();
@@ -83,9 +81,9 @@ public class UnitTest1
             .ReturnsAsync(new ValidationResult());
 
         var handler = new UploadFilesHandler(
-            fileProviderMock.Object,
-            loggerMock.Object,
-            volunteerRepositoryMock.Object,
+            _fileProviderMock.Object,
+            _loggerMock.Object,
+            _volunteerRepositoryMock.Object,
             unitOfWorkMock.Object,
             validatorMock.Object);
         //act
