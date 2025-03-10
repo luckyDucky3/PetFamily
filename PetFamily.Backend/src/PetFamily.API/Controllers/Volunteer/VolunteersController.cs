@@ -1,29 +1,26 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Controllers.Processors;
 using PetFamily.API.Controllers.Volunteer.VolunteerRequests;
 using PetFamily.API.Extensions;
-using PetFamily.Application.FileProvider;
-using PetFamily.Application.Volunteers._Dto;
-using PetFamily.Application.Volunteers.AddHelpRequisites;
-using PetFamily.Application.Volunteers.AddSocialNetworks;
-using PetFamily.Application.Volunteers.Create;
-using PetFamily.Application.Volunteers.HardDelete;
-using PetFamily.Application.Volunteers.Pets.AddPet;
-using PetFamily.Application.Volunteers.Pets.GetPet;
-using PetFamily.Application.Volunteers.Pets.RemovePet;
-using PetFamily.Application.Volunteers.Pets.UploadFilesToPet;
-using PetFamily.Application.Volunteers.SoftDelete;
-using PetFamily.Application.Volunteers.UpdateMainInfo;
+using PetFamily.Application.Dtos;
+using PetFamily.Application.Volunteers.Commands.AddHelpRequisites;
+using PetFamily.Application.Volunteers.Commands.AddSocialNetworks;
+using PetFamily.Application.Volunteers.Commands.Create;
+using PetFamily.Application.Volunteers.Commands.HardDelete;
+using PetFamily.Application.Volunteers.Commands.SoftDelete;
+using PetFamily.Application.Volunteers.Commands.UpdateMainInfo;
+using PetFamily.Application.Volunteers.Pets.Commands.AddPet;
+using PetFamily.Application.Volunteers.Pets.Commands.RemovePet;
+using PetFamily.Application.Volunteers.Pets.Commands.UploadFilesToPet;
+using PetFamily.Application.Volunteers.Pets.Queries.GetPet;
 using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.API.Controllers.Volunteer;
 
 [ApiController]
 [Route("[controller]")]
-public class VolunteersController : ControllerBase
+public class VolunteersController : ApplicationController
 {
-
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
         [FromBody] CreateVolunteerRequest createVolunteerRequest,
@@ -122,7 +119,7 @@ public class VolunteersController : ControllerBase
     [HttpPost("{id:guid}/pet")]
     public async Task<IActionResult> AddPet(
         [FromRoute] Guid id,
-        [FromForm] AddPetRequest addPetRequest,
+        [FromBody] AddPetRequest addPetRequest,
         [FromServices] AddPetHandler addPetHandler,
         CancellationToken cancellationToken = default)
     {

@@ -7,6 +7,7 @@ using PetFamily.Application.Database;
 using PetFamily.Application.Species;
 using PetFamily.Application.Volunteers;
 using PetFamily.Infrastructure.BackgroundServices;
+using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.MessageQueues;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
@@ -22,15 +23,46 @@ public static class Inject
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddScoped<ApplicatonDbContext>();
+        services
+            .AddDbContexts()
+            .AddDbRepositories()
+            .AddDatabase()
+            .AddHostedServices()
+            .AddMessaging()
+            .AddMinio(configuration);
+        
+        return services;
+    }
+
+    private static IServiceCollection AddMessaging(this IServiceCollection services)
+    {
+        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, FilesCleanerMessageQueue>();
+        return services;
+    }
+
+    private static IServiceCollection AddHostedServices(this IServiceCollection services)
+    {
+        services.AddHostedService<FilesCleanerBackgroundService>();
+        return services;
+    }
+
+    private static IServiceCollection AddDatabase(this IServiceCollection services)
+    {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        return services;
+    }
+
+    private static IServiceCollection AddDbContexts(this IServiceCollection services)
+    {
+        services.AddScoped<WriteDbContext>();
+        services.AddScoped<IReadDbContext, ReadDbContext>();
+        return services;
+    }
+
+    private static IServiceCollection AddDbRepositories(this IServiceCollection services)
+    {
         services.AddScoped<IVolunteersRepository, VolunteersRepository>();
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddMinio(configuration);
-        
-        services.AddHostedService<FilesCleanerBackgroundService>();
-        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, FilesCleanerMessageQueue>();
-
         return services;
     }
 

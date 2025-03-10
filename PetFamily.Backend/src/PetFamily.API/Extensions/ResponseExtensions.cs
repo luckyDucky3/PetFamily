@@ -19,7 +19,7 @@ public static class ResponseExtensions
         return new ObjectResult(envelope) { StatusCode = statusCode };
     }
     
-    public static ActionResult ToResponse(this ErrorList errors)
+    public static ActionResult ToResponse(this ErrorList? errors)
     {
         if (!errors.Any())
         {
