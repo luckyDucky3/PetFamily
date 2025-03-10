@@ -12,7 +12,7 @@ public sealed class Pet : SoftDeletableEntity<PetId>
     {
     }
 
-    public SerialNumber SerialNumber { get; private set; }
+    public Position Position { get; private set; }
     public Volunteer Volunteer { get; private set; } = null!;
 
     public string Name { get; private set; } = null!;
@@ -83,8 +83,11 @@ public sealed class Pet : SoftDeletableEntity<PetId>
         return Result.Success<Pet, Error>(pet);
     }
 
-    public void SetSerialNumber(SerialNumber serialNumber)
+    public void SetPosition(Position position)
     {
-        SerialNumber = serialNumber;
+        Position = position;
     }
+
+    public void UpdateFiles(List<PetFile> petFiles)
+        => _files = petFiles;
 }

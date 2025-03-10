@@ -1,5 +1,7 @@
 using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Extensions;
 using PetFamily.Application.Volunteers._Dto;
 using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.Ids;
@@ -21,18 +23,25 @@ public class CreateVolunteerHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly ILogger<CreateVolunteerHandler> _logger;
+    private readonly IValidator<CreateVolunteerCommand> _validator;
 
     public CreateVolunteerHandler(
         IVolunteersRepository volunteersRepository,
-        ILogger<CreateVolunteerHandler> logger)
+        ILogger<CreateVolunteerHandler> logger,
+        IValidator<CreateVolunteerCommand> validator)
     {
         _volunteersRepository = volunteersRepository;
         _logger = logger;
+        _validator = validator;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
+    public async Task<Result<Guid, ErrorList>> Handle(
         CreateVolunteerCommand createVolunteerCommand, CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(createVolunteerCommand, cancellationToken);
+        if (!validationResult.IsValid)
+            return validationResult.ToErrorList();
+        
         var volunteerId = VolunteerId.NewVolunteerId();
 
         var experienceYears = createVolunteerCommand.ExperienceYears;
@@ -73,7 +82,7 @@ public class CreateVolunteerHandler
             experienceYears);
 
         if (volunteerResult.IsFailure)
-            return Result.Failure<Guid, Error>(volunteerResult.Error);
+            return volunteerResult.Error.ToErrorList();
 
         if (socialNetworks.Any())
             volunteerResult.Value.AddSocialNetworks(socialNetworks);
@@ -81,10 +90,10 @@ public class CreateVolunteerHandler
         if (requisitesForHelp.Any())
             volunteerResult.Value.AddHelpRequisites(requisitesForHelp);
 
-        Guid vId = await _volunteersRepository.Add(volunteerResult.Value, cancellationToken);
+        Guid id = await _volunteersRepository.Add(volunteerResult.Value, cancellationToken);
 
         _logger.LogInformation("Volunteer has been successfully added");
 
-        return Result.Success<Guid, Error>(vId);
+        return id;
     }
 }

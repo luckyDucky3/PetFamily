@@ -1,11 +1,11 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.FileProvider;
-using PetFamily.Application.Pets.AddPet;
-using PetFamily.Application.Providers;
+using PetFamily.Application.Volunteers.Pets.AddPet;
 using PetFamily.Domain.Shared;
+using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
-namespace PetFamily.Application.Pets.RemovePet;
+namespace PetFamily.Application.Volunteers.Pets.RemovePet;
 
 public class RemovePetHandler
 {
@@ -18,7 +18,7 @@ public class RemovePetHandler
         _logger = logger;
     }
 
-    public async Task<Result<string, Error>> Handle(FileDataRemove fileData, CancellationToken cancellationToken)
+    public async Task<Result<string, Error>> Handle(FileInfo fileData, CancellationToken cancellationToken)
     {
         return await _fileProvider.DeleteFile(fileData, cancellationToken);
     }

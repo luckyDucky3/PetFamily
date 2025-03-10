@@ -1,34 +1,44 @@
 using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Minio;
-using Minio.DataModel;
 using Minio.DataModel.Args;
-using Minio.DataModel.Response;
 using PetFamily.Application.FileProvider;
-using PetFamily.Application.Providers;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
+using PetFamily.Infrastructure.MessageQueues;
+using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.Infrastructure.Providers;
 
 public class MinioProvider : IFileProvider
 {
-    public const int MAX_DEGREE_OF_PARALLELISM = 5;
+    private const string MAX_DEGREE = "Minio:MaxDegreeOfParallelism";
+    
     private readonly IMinioClient _minioClient;
     private readonly ILogger<MinioProvider> _logger;
+    private readonly IMessageQueue<IEnumerable<FileInfo>> _messageQueue;
+    private readonly int _maxDegreeOfParallelism;
 
-    public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger)
+    public MinioProvider(
+        IMinioClient minioClient, 
+        ILogger<MinioProvider> logger,
+        IConfiguration configuration,
+        IMessageQueue<IEnumerable<FileInfo>> messageQueue)
     {
         _minioClient = minioClient;
         _logger = logger;
+        _messageQueue = messageQueue;
+        _maxDegreeOfParallelism = configuration.GetValue<int>(MAX_DEGREE);
     }
 
     public async Task<Result<IReadOnlyList<FilePath>, Error>> UploadFiles(
-        IEnumerable<FileDataUpload> filesData,
+        IEnumerable<FileData> filesData,
         CancellationToken cancellationToken = default)
     {
-        SemaphoreSlim semaphoreSlim = new(MAX_DEGREE_OF_PARALLELISM);
-        var filesList = filesData.ToList();
+        using SemaphoreSlim semaphoreSlim = new(_maxDegreeOfParallelism);
+        var dataList = filesData.ToList();
+        var filesList = dataList.ToList();
 
         try
         {
@@ -43,11 +53,15 @@ public class MinioProvider : IFileProvider
                 return pathsResult.First().Error;
 
             var results = pathsResult.Select(p => p.Value).ToList();
-
+            
+            _logger.LogInformation("Uploaded fies: {files}", results.Select(r => r.PathToStorage));
+            
             return results;
         }
         catch (Exception ex)
         {
+            await _messageQueue.WriteAsync(dataList.Select(f => f.FileInfo), cancellationToken);
+            
             _logger.LogError(ex,
                 "Fail to upload files in minio, files amount: {amount}", filesList.Count);
 
@@ -58,17 +72,23 @@ public class MinioProvider : IFileProvider
     }
 
     public async Task<Result<string, Error>> DeleteFile(
-        FileDataRemove fileDataRemove,
+        FileInfo fileInfo,
         CancellationToken cancellationToken = default)
     {
         try
         {
+            var statArgs = new StatObjectArgs()
+                .WithBucket(fileInfo.BucketName)
+                .WithObject(fileInfo.FilePath.PathToStorage);
+            if (statArgs == null)
+                return Result.Success<string, Error>(fileInfo.FilePath.PathToStorage);
+
             var removeObjectArgs = new RemoveObjectArgs()
-                .WithBucket(fileDataRemove.BucketName)
-                .WithObject(fileDataRemove.ObjectName);
+                .WithBucket(fileInfo.BucketName)
+                .WithObject(fileInfo.FilePath.PathToStorage);
 
             await _minioClient.RemoveObjectAsync(removeObjectArgs, cancellationToken);
-            return Result.Success<string, Error>(fileDataRemove.ObjectName);
+            return Result.Success<string, Error>(fileInfo.FilePath.PathToStorage);
         }
         catch (Exception ex)
         {
@@ -78,14 +98,14 @@ public class MinioProvider : IFileProvider
     }
 
     public async Task<Result<string, Error>> GetFile(
-        FileDataGet fileDataGet,
+        FileInfo fileInfo,
         CancellationToken cancellationToken = default)
     {
         try
         {
             var getObjectArgs = new PresignedGetObjectArgs()
-                .WithBucket(fileDataGet.BucketName)
-                .WithObject(fileDataGet.ObjectName)
+                .WithBucket(fileInfo.BucketName)
+                .WithObject(fileInfo.FilePath.PathToStorage)
                 .WithExpiry(60 * 60 * 24);
             var result = await _minioClient.PresignedGetObjectAsync(getObjectArgs);
             return Result.Success<string, Error>(result);
@@ -98,29 +118,29 @@ public class MinioProvider : IFileProvider
     }
 
     private async Task<Result<FilePath, Error>> PutObject(
-        FileDataUpload fileDataUpload,
+        FileData fileData,
         SemaphoreSlim semaphoreSlim,
         CancellationToken cancellationToken)
     {
         await semaphoreSlim.WaitAsync(cancellationToken);
 
         var putObjectArgs = new PutObjectArgs()
-            .WithBucket(fileDataUpload.BucketName)
-            .WithStreamData(fileDataUpload.Stream)
-            .WithObjectSize(fileDataUpload.Stream.Length)
-            .WithObject(fileDataUpload.FilePath.PathToStorage);
+            .WithBucket(fileData.FileInfo.BucketName)
+            .WithStreamData(fileData.Stream)
+            .WithObjectSize(fileData.Stream.Length)
+            .WithObject(fileData.FileInfo.FilePath.PathToStorage);
 
         try
         {
             await _minioClient.PutObjectAsync(putObjectArgs, cancellationToken);
-            return fileDataUpload.FilePath;
+            return fileData.FileInfo.FilePath;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex,
                 "Fail to upload file in minio with path {path} in bucket {bucket}",
-                fileDataUpload.FilePath.PathToStorage,
-                fileDataUpload.BucketName);
+                fileData.FileInfo.FilePath.PathToStorage,
+                fileData.FileInfo.BucketName);
 
             return Error.Failure("file.upload", "Fail to upload file in minio");
         }
@@ -130,10 +150,10 @@ public class MinioProvider : IFileProvider
         }
     }
     
-    private async Task IfBucketNotExistCreateBucket(IEnumerable<FileDataUpload> filesData,
+    private async Task IfBucketNotExistCreateBucket(IEnumerable<FileData> filesData,
         CancellationToken cancellationToken = default)
     {
-        HashSet<string> bucketNames = [..filesData.Select(f => f.BucketName)];
+        HashSet<string> bucketNames = [..filesData.Select(f => f.FileInfo.BucketName)];
 
         foreach (var bucketName in bucketNames)
         {

@@ -21,8 +21,8 @@ public class ExceptionMiddleware
         }
         catch (Exception ex)
         {
-            var responseError = new ResponseError("internal.server", ex.Message, null);
-            Envelope envelope = Envelope.Error([responseError]);
+            var error = Error.Failure("internal.server", ex.Message);
+            Envelope envelope = Envelope.Error(error);
             
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
