@@ -1,3 +1,7 @@
 namespace PetFamily.Application.Volunteers.Pets.Commands.PetDtos;
 
-public record UploadFileDto(Stream Stream, string FileName);
+public class UploadFileDto
+{
+    public Stream Stream { get; init; }
+    public string FileName { get; init; }
+}

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Models;
 
@@ -25,5 +26,13 @@ public static class QueriesExtensions
             Page = page, 
             PageSize = pageSize
         };
+    }
+    
+    public static IQueryable<TEntity> WhereIf<TEntity>(
+        this IQueryable<TEntity> query,
+        bool condition,
+        Expression<Func<TEntity, bool>> predicate)
+    {
+        return condition ? query.Where(predicate) : query;
     }
 }

@@ -10,4 +10,10 @@ public abstract class ApplicationController : ControllerBase
         var envelope = Envelope.Ok(value);
         return new OkObjectResult(envelope);
     }
+
+    public override CreatedResult Created(string? uri, object? value)
+    {
+        var envelope = Envelope.Ok(value);
+        return base.Created(uri, envelope);
+    }
 }

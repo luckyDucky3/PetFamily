@@ -1,7 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+using PetFamily.Domain.Shared;
+
 namespace PetFamily.Application.Volunteers.Pets.Commands.PetDtos;
 
-public record AddressDto(
-    string Country,
-    string City,
-    string Street,
-    string HomeNumber);
+public class AddressDto
+{
+    public string Country { get; init; }
+    public string City { get; init; }
+    public string Street { get; init; }
+    public string HomeNumber { get; init; }
+};

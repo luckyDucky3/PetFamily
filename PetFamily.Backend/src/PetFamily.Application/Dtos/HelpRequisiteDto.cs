@@ -1,3 +1,7 @@
 namespace PetFamily.Application.Dtos;
 
-public record HelpRequisiteDto(string Title, string Description);
+public class HelpRequisiteDto
+{
+    public string Title { get; init; }
+    public string Description { get; init; }
+}

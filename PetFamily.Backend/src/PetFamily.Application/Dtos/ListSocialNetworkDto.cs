@@ -1,3 +1,6 @@
 namespace PetFamily.Application.Dtos;
 
-public record ListSocialNetworkDto(List<SocialNetworkDto> SocialNetworkDtos);
+public class ListSocialNetworkDto
+{
+    public List<SocialNetworkDto> SocialNetworkDtos { get; init; }
+}

@@ -1,3 +1,6 @@
 namespace PetFamily.Application.Dtos;
 
-public record ListHelpRequisiteDto(List<HelpRequisiteDto> HelpRequisiteDtos);
+public class ListHelpRequisiteDto
+{
+    public List<HelpRequisiteDto> HelpRequisiteDtos { get; init; }
+}

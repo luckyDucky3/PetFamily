@@ -11,7 +11,7 @@ public class FormFileProcessor : IAsyncDisposable
         foreach (var file in files)
         {
             var stream = file.OpenReadStream();
-            var fileDto = new UploadFileDto(stream, file.FileName);
+            var fileDto = new UploadFileDto{Stream = stream, FileName = file.FileName};
             _fileDtos.Add(fileDto);
         }
 

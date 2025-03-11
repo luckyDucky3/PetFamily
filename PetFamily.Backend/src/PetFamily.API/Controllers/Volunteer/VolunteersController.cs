@@ -33,7 +33,7 @@ public class VolunteersController : ApplicationController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return Created(result.Value.ToString(), null);
+        return Created(result.Value.ToString(), result.Value.ToString());
     }
 
     [HttpDelete("hard/{id:guid}/volunteer")]

@@ -1,3 +1,7 @@
 namespace PetFamily.Application.Dtos;
 
-public record SocialNetworkDto(string Name, string Link);
+public class SocialNetworkDto
+{
+    public string Name { get; init; }
+    public string Link { get; init; }
+}

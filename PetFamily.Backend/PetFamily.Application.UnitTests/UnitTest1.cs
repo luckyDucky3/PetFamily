@@ -52,7 +52,7 @@ public class UnitTest1
         
         var stream = new MemoryStream();
         var fileName = "test.jpg";
-        var uploadFileDto = new UploadFileDto(stream, fileName);
+        var uploadFileDto = new UploadFileDto{Stream = stream, FileName = fileName};
         List<UploadFileDto> files = [uploadFileDto, uploadFileDto, uploadFileDto];
         var command = new UploadFilesToPetCommand(volunteerId, petId, files);
 
