@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
@@ -5,11 +6,13 @@ namespace PetFamily.Domain.Models.VO;
 
 public class FilePath : ValueObject
 {
+    //EF
+    [JsonConstructor]
     private FilePath(string path)
     {
-        PathToStorage = path;
+        Path = path;
     }
-    public string PathToStorage { get; }
+    public string Path { get; }
 
     public static Result<FilePath, Error> Create(Guid path, string extension)
     {
@@ -20,6 +23,6 @@ public class FilePath : ValueObject
     
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return PathToStorage;
+        yield return Path;
     }
 }

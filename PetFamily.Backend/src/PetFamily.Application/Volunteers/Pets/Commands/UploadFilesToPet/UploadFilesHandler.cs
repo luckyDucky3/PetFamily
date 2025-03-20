@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.FileProvider;
@@ -12,9 +13,9 @@ using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.Application.Volunteers.Pets.Commands.UploadFilesToPet;
 
-public record UploadFilesToPetCommand(Guid VolunteerId, Guid PetId, IEnumerable<UploadFileDto> Files);
+public record UploadFilesToPetCommand(Guid VolunteerId, Guid PetId, IEnumerable<UploadFileDto> Files) : ICommand;
 
-public class UploadFilesHandler
+public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
 {
     private const string BUCKET_NAME = "photos";
 
@@ -47,14 +48,14 @@ public class UploadFilesHandler
         VolunteerId volunteerId = VolunteerId.Create(command.VolunteerId);
         var volunteer = await _volunteersRepository.GetById(volunteerId, cancellationToken);
         if (volunteer == null)
-            return Errors.General.IsNotFound(command.VolunteerId).ToErrorList();
+            return Errors.General.IsNotFound(command.VolunteerId).ToErrorList()!;
 
         var petResult = volunteer.GetPetById(command.PetId);
         if (petResult.IsFailure)
-            return petResult.Error.ToErrorList();
+            return petResult.Error.ToErrorList()!;
 
         var pet = petResult.Value;
-
+        
         List<FileData> fileDataUploads = [];
         foreach (var file in command.Files)
         {
@@ -62,7 +63,7 @@ public class UploadFilesHandler
 
             var filePath = FilePath.Create(Guid.NewGuid(), extension);
             if (filePath.IsFailure)
-                return filePath.Error.ToErrorList();
+                return filePath.Error.ToErrorList()!;
 
             var fileData = new FileData(file.Stream, new FileInfo(filePath.Value, BUCKET_NAME));
             fileDataUploads.Add(fileData);
@@ -70,7 +71,7 @@ public class UploadFilesHandler
 
         var filePathsResult = await _fileProvider.UploadFiles(fileDataUploads, cancellationToken);
         if (filePathsResult.IsFailure)
-            return filePathsResult.Error.ToErrorList();
+            return filePathsResult.Error.ToErrorList()!;
 
         var petFiles = filePathsResult.Value
             .Select(f => new PetFile(f))

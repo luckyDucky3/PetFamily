@@ -13,6 +13,7 @@ using PetFamily.Application.Volunteers.Pets.Commands.AddPet;
 using PetFamily.Application.Volunteers.Pets.Commands.RemovePet;
 using PetFamily.Application.Volunteers.Pets.Commands.UploadFilesToPet;
 using PetFamily.Application.Volunteers.Pets.Queries.GetPet;
+using PetFamily.Application.Volunteers.Queries.GetVolunteersWithPagination;
 using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.API.Controllers.Volunteer;
@@ -21,6 +22,16 @@ namespace PetFamily.API.Controllers.Volunteer;
 [Route("[controller]")]
 public class VolunteersController : ApplicationController
 {
+    [HttpGet]
+    public async Task<ActionResult> GetAllVolunteers(
+        [FromQuery] GetVolunteersWithPaginationRequest request,
+        [FromServices] GetVolunteersWithPagination handler,
+        CancellationToken cancellationToken)
+    {
+        var query = request.ToQuery();
+        var volunteers = await handler.Handle(query, cancellationToken);
+        return Ok(volunteers);
+    }
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
         [FromBody] CreateVolunteerRequest createVolunteerRequest,
@@ -180,3 +191,4 @@ public class VolunteersController : ApplicationController
         return Ok(result.Value);
     }
 }
+

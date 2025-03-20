@@ -3,7 +3,7 @@ using PetFamily.API.Extensions;
 using PetFamily.API.Specie.SpecieRequests;
 using PetFamily.Application.Species.Create;
 
-namespace PetFamily.API.Specie;
+namespace PetFamily.API.Controllers.Specie;
 
 [ApiController]
 [Route("[controller]")]

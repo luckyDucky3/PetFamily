@@ -14,5 +14,6 @@ public class VolunteerDtoConfiguration : IEntityTypeConfiguration<VolunteerDto>
             .WithOne()
             .HasForeignKey(p => p.VolunteerId)
             .IsRequired();
+        builder.ComplexProperty(v => v.Name);
     }
 }

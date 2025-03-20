@@ -16,13 +16,20 @@ public class PetDto
     public string InfoAboutHealth { get; init; } = string.Empty;
     public double? Weight { get; init; }
     public double? Height { get; init; }
-    public string PhoneNumber { get; init; } = string.Empty;
+    public string? PhoneNumber { get; init; } = string.Empty;
     public bool IsCastrate { get; init; }
     public bool IsVaccinate { get; init; }
     public DateTime BirthDate { get; init; }
     public Status Status { get; init; }
     public DateTime CreatedOn { get; init; }
+    public PetFileDto[] Files { get; set; }
     
     [Column("pet_volunteer_id")]
     public Guid VolunteerId { get; init; }
+}
+
+public class PetFileDto
+{
+    public string PathToStorage { get; set; } = string.Empty;
+    public int Size { get; set; }
 }
