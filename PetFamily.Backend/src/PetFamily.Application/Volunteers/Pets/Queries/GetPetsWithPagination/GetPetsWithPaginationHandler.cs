@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Text.Json;
 using Dapper;
 using PetFamily.Application.Abstractions;
@@ -10,7 +11,14 @@ using PetFamily.Application.Volunteers.Pets.Commands.PetDtos;
 
 namespace PetFamily.Application.Volunteers.Pets.Queries.GetPetsWithPagination;
 
-public record GetPetsWithPaginationQuery(string? Name, int? FromPosition, int? ToPosition, int Page, int PageSize)
+public record GetPetsWithPaginationQuery(
+    string? Name,
+    int? FromPosition,
+    int? ToPosition,
+    string? SortBy,
+    bool? SortAscending,
+    int Page,
+    int PageSize)
     : IQuery;
 
 public class GetPetsWithPaginationHandler : IQueryHandler<PagedList<PetDto>, GetPetsWithPaginationQuery>
@@ -28,10 +36,22 @@ public class GetPetsWithPaginationHandler : IQueryHandler<PagedList<PetDto>, Get
     {
         var petsQuery = _readDbContext.Pets.AsQueryable();
 
-        petsQuery = petsQuery.WhereIf(query.Name != null, p => query.Name == p.Name);
+        petsQuery = petsQuery.WhereIf(query.Name != null, p => p.Name.StartsWith(query.Name!));
         petsQuery = petsQuery.WhereIf(query.FromPosition != null, p => p.Position >= query.FromPosition);
         petsQuery = petsQuery.WhereIf(query.ToPosition != null, p => p.Position <= query.ToPosition);
 
+        Expression<Func<PetDto, object>> keySelector = query.SortBy?.ToLower() switch
+        {
+            "name" => p => p.Name,
+            "height" => p => p.Height ?? 0,
+            _ => p => p.Id
+        };
+        
+        if (query.SortAscending ?? true)
+            petsQuery = petsQuery.OrderBy(keySelector);
+        else
+            petsQuery = petsQuery.OrderByDescending(keySelector);
+        
         return await petsQuery.ToPageList(query.Page, query.PageSize, cancellationToken);
     }
 }
