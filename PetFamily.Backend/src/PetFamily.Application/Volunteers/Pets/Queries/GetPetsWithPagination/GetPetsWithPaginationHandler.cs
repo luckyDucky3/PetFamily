@@ -1,13 +1,9 @@
-using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Text.Json;
-using Dapper;
 using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.Models;
-using PetFamily.Application.Volunteers.Pets.Commands.PetDtos;
 
 namespace PetFamily.Application.Volunteers.Pets.Queries.GetPetsWithPagination;
 

@@ -14,11 +14,11 @@ public record GetVolunteersWithPaginationQuery(
     int Page,
     int PageSize) : IQuery;
 
-public class GetVolunteersWithPagination : IQueryHandler<PagedList<VolunteerDto>, GetVolunteersWithPaginationQuery>
+public class GetVolunteersWithPaginationHandler : IQueryHandler<PagedList<VolunteerDto>, GetVolunteersWithPaginationQuery>
 {
     private readonly IReadDbContext _readDbContext;
 
-    public GetVolunteersWithPagination(IReadDbContext readDbContext)
+    public GetVolunteersWithPaginationHandler(IReadDbContext readDbContext)
     {
         _readDbContext = readDbContext;
     }
