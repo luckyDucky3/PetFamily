@@ -36,7 +36,7 @@ public class GetPetsWithPaginationHandler : IQueryHandler<PagedList<PetDto>, Get
     }
 }
 
-//тестовый Handler, не учавствующий в проекте
+//тестовый Handler, не участвующий в проекте
 public class GetPetsWithPaginationHandlerDapper : IQueryHandler<PagedList<PetDto>, GetPetsWithPaginationQuery>
 {
     private readonly ISqlConnectionFactory _sqlConnectionFactory;

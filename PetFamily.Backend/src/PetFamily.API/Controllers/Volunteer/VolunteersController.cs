@@ -165,30 +165,36 @@ public class VolunteersController : ApplicationController
     }
 
 
-    [HttpDelete("test-method")]
+    [HttpDelete("file")]
     public async Task<IActionResult> DeleteFile(
-        [FromBody] FileInfo fileInfo,
+        [FromBody] RemovePetRequest request,
         [FromServices] RemovePetHandler removePetHandler,
         CancellationToken cancellationToken = default)
     {
-        var result = await removePetHandler.Handle(fileInfo, cancellationToken);
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-
-        return Ok(result.Value);
+        var query = request.ToQuery();
+        var result = await removePetHandler.Handle(query, cancellationToken);
+        return Ok(result);
     }
 
-    [HttpGet("test-method")]
-    public async Task<IActionResult> GetFile(
-        [FromQuery] FileInfo fileInfo,
+    [HttpGet("file-link")]
+    public async Task<IActionResult> GetFileLink(
+        [FromQuery] GetPetRequest request,
         [FromServices] GetPetHandler getPetHandler,
         CancellationToken cancellationToken = default)
     {
-        var result = await getPetHandler.Handle(fileInfo, cancellationToken);
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-
-        return Ok(result.Value);
+        var query = request.ToQuery();
+        var result = await getPetHandler.Handle(query, cancellationToken);
+        return Ok(result);
     }
+}
+
+public record RemovePetRequest(string FilePath, string BucketName)
+{
+    public RemovePetQuery ToQuery() => new RemovePetQuery(FilePath, BucketName);
+}
+
+public record GetPetRequest(string FilePath, string BucketName)
+{
+    public GetPetQuery ToQuery() => new GetPetQuery(FilePath, BucketName);
 }
 

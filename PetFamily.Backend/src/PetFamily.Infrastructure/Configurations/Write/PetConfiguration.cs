@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetFamily.Application.Dtos;
@@ -7,7 +8,6 @@ using PetFamily.Domain.Enums;
 using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
-using PetFamily.Domain.Shared;
 using PetFamily.Infrastructure.Extensions;
 
 namespace PetFamily.Infrastructure.Configurations.Write;
@@ -103,14 +103,14 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property<bool>("IsDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");
-        
+
         builder.Property<DateTime>("DeletionDate")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .SetDateTimeKind(DateTimeKind.Utc)
             .HasColumnName("deletion_date");
-        
+
         builder.Property(p => p.Files)
-            .JsonValueObjectCollectionConversion()
+            .JsonValueObjectsForPetFiles()
             .HasColumnName("files");
     }
 }

@@ -1,12 +1,14 @@
-using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.FileProvider;
-using PetFamily.Domain.Shared;
+using PetFamily.Domain.Models.VO;
 using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
 namespace PetFamily.Application.Volunteers.Pets.Queries.GetPet;
 
-public class GetPetHandler
+public record GetPetQuery(string FilePath, string BucketName) : IQuery;
+
+public class GetPetHandler : IQueryHandler<string, GetPetQuery>
 {
     private readonly IFileProvider _fileProvider;
     private readonly ILogger<GetPetHandler> _logger;
@@ -17,8 +19,18 @@ public class GetPetHandler
         _logger = logger;
     }
 
-    public async Task<Result<string, Error>> Handle(FileInfo fileInfo, CancellationToken cancellationToken)
+    public async Task<string> Handle(
+            GetPetQuery query,
+            CancellationToken cancellationToken) 
     {
-        return await _fileProvider.GetFile(fileInfo, cancellationToken);
+        var filePath = new FilePath(query.FilePath);
+
+        FileInfo fileInfo = new FileInfo(filePath, query.BucketName);
+        var fileResult = await _fileProvider.GetFile(fileInfo, cancellationToken);
+        if (fileResult.IsFailure)
+            return string.Empty;
+        
+        _logger.LogInformation("Get pet: {0}", fileResult.Value);
+        return fileResult.Value;
     }
 }

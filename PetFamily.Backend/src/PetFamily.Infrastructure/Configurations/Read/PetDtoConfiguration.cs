@@ -23,10 +23,6 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
         builder.Property(p => p.Files)
             .HasConversion(
                 files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
-                json => JsonSerializer.Deserialize<IReadOnlyList<PetFile>>(json, JsonSerializerOptions.Default)!
-                    .Select(f => new PetFileDto
-                    {
-                        PathToStorage = f.PathToStorage.Path
-                    }).ToArray());
+                json => JsonSerializer.Deserialize<PetFileDto[]>(json, JsonSerializerOptions.Default)!);
     }
 }

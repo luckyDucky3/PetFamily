@@ -8,7 +8,7 @@ public class FilePath : ValueObject
 {
     //EF
     [JsonConstructor]
-    private FilePath(string path)
+    public FilePath(string path)
     {
         Path = path;
     }
