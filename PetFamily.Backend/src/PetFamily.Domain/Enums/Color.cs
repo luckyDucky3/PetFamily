@@ -2,7 +2,7 @@ namespace PetFamily.Domain.Enums;
 
 public enum Color
 {
-    Black = 0,
+    Black = 1,
     White,
     Orange,
     Brown,

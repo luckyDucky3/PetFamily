@@ -2,30 +2,30 @@ using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Volunteers;
-using PetFamily.Application.Volunteers.UpdateMainInfo;
 using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
+using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Repositories;
 
 public class VolunteersRepository : IVolunteersRepository
 {
-    private readonly ApplicatonDbContext _dbContext;
+    private readonly WriteDbContext _writeDbContext;
 
     public VolunteersRepository(
-        ApplicatonDbContext dbContext)
+        WriteDbContext writeDbContext)
     {
-        _dbContext = dbContext;
+        _writeDbContext = writeDbContext;
     }
 
     public async Task<Guid> Add(
         Volunteer volunteer, 
         CancellationToken cancellationToken = default)
     {
-        await _dbContext.Volunteers.AddAsync(volunteer, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _writeDbContext.Volunteers.AddAsync(volunteer, cancellationToken);
+        await _writeDbContext.SaveChangesAsync(cancellationToken);
 
         return (Guid)volunteer.Id;
     }
@@ -34,7 +34,7 @@ public class VolunteersRepository : IVolunteersRepository
         VolunteerId voluneerId, 
         CancellationToken cancellationToken = default)
     {
-        var volunteer = await _dbContext.Volunteers
+        var volunteer = await _writeDbContext.Volunteers
             .Include(v => v.Pets)
             .FirstOrDefaultAsync(v => v.Id == voluneerId, cancellationToken);
         
@@ -45,15 +45,15 @@ public class VolunteersRepository : IVolunteersRepository
         Volunteer volunteer, 
         CancellationToken cancellationToken = default)
     {
-        _dbContext.Volunteers.Attach(volunteer);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        _writeDbContext.Volunteers.Attach(volunteer);
+        await _writeDbContext.SaveChangesAsync(cancellationToken);
         return volunteer.Id.Value;
     }
 
     public async Task<Guid> HardDelete(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
-        _dbContext.Remove(volunteer);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        _writeDbContext.Remove(volunteer);
+        await _writeDbContext.SaveChangesAsync(cancellationToken);
         return volunteer.Id.Value;
     }
 
@@ -61,7 +61,7 @@ public class VolunteersRepository : IVolunteersRepository
         FullName fullName, 
         CancellationToken cancellationToken = default)
     {
-        var volunteer = await _dbContext.Volunteers
+        var volunteer = await _writeDbContext.Volunteers
             .Include(v => v.Pets)
             .FirstOrDefaultAsync(v => v.Name == fullName, cancellationToken);
 

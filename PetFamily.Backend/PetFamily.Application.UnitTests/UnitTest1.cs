@@ -6,8 +6,8 @@ using Moq;
 using PetFamily.Application.Database;
 using PetFamily.Application.FileProvider;
 using PetFamily.Application.Volunteers;
-using PetFamily.Application.Volunteers.Pets.PetDtos;
-using PetFamily.Application.Volunteers.Pets.UploadFilesToPet;
+using PetFamily.Application.Volunteers.Pets.Commands.PetDtos;
+using PetFamily.Application.Volunteers.Pets.Commands.UploadFilesToPet;
 using PetFamily.Domain.Enums;
 using PetFamily.Domain.Models.Entities.Specie;
 using PetFamily.Domain.Models.Entities.Volunteer;
@@ -52,7 +52,7 @@ public class UnitTest1
         
         var stream = new MemoryStream();
         var fileName = "test.jpg";
-        var uploadFileDto = new UploadFileDto(stream, fileName);
+        var uploadFileDto = new UploadFileDto{Stream = stream, FileName = fileName};
         List<UploadFileDto> files = [uploadFileDto, uploadFileDto, uploadFileDto];
         var command = new UploadFilesToPetCommand(volunteerId, petId, files);
 

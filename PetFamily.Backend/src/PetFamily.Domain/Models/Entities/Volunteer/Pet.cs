@@ -17,7 +17,7 @@ public sealed class Pet : SoftDeletableEntity<PetId>
 
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
-    public SpeciesBreeds? SpeciesBreeds { get; private set; } = null!;
+    public SpeciesBreeds? SpeciesBreeds { get; private set; }
     public Color Color { get; private set; }
     public Address Address { get; private set; } = null!;
     public string InfoAboutHealth { get; private set; } = null!;

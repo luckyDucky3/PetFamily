@@ -54,7 +54,7 @@ public class MinioProvider : IFileProvider
 
             var results = pathsResult.Select(p => p.Value).ToList();
             
-            _logger.LogInformation("Uploaded fies: {files}", results.Select(r => r.PathToStorage));
+            _logger.LogInformation("Uploaded fies: {files}", results.Select(r => r.Path));
             
             return results;
         }
@@ -79,16 +79,16 @@ public class MinioProvider : IFileProvider
         {
             var statArgs = new StatObjectArgs()
                 .WithBucket(fileInfo.BucketName)
-                .WithObject(fileInfo.FilePath.PathToStorage);
+                .WithObject(fileInfo.FilePath.Path);
             if (statArgs == null)
-                return Result.Success<string, Error>(fileInfo.FilePath.PathToStorage);
+                return Result.Success<string, Error>(fileInfo.FilePath.Path);
 
             var removeObjectArgs = new RemoveObjectArgs()
                 .WithBucket(fileInfo.BucketName)
-                .WithObject(fileInfo.FilePath.PathToStorage);
+                .WithObject(fileInfo.FilePath.Path);
 
             await _minioClient.RemoveObjectAsync(removeObjectArgs, cancellationToken);
-            return Result.Success<string, Error>(fileInfo.FilePath.PathToStorage);
+            return Result.Success<string, Error>(fileInfo.FilePath.Path);
         }
         catch (Exception ex)
         {
@@ -105,7 +105,7 @@ public class MinioProvider : IFileProvider
         {
             var getObjectArgs = new PresignedGetObjectArgs()
                 .WithBucket(fileInfo.BucketName)
-                .WithObject(fileInfo.FilePath.PathToStorage)
+                .WithObject(fileInfo.FilePath.Path)
                 .WithExpiry(60 * 60 * 24);
             var result = await _minioClient.PresignedGetObjectAsync(getObjectArgs);
             return Result.Success<string, Error>(result);
@@ -128,7 +128,7 @@ public class MinioProvider : IFileProvider
             .WithBucket(fileData.FileInfo.BucketName)
             .WithStreamData(fileData.Stream)
             .WithObjectSize(fileData.Stream.Length)
-            .WithObject(fileData.FileInfo.FilePath.PathToStorage);
+            .WithObject(fileData.FileInfo.FilePath.Path);
 
         try
         {
@@ -139,7 +139,7 @@ public class MinioProvider : IFileProvider
         {
             _logger.LogError(ex,
                 "Fail to upload file in minio with path {path} in bucket {bucket}",
-                fileData.FileInfo.FilePath.PathToStorage,
+                fileData.FileInfo.FilePath.Path,
                 fileData.FileInfo.BucketName);
 
             return Error.Failure("file.upload", "Fail to upload file in minio");

@@ -1,6 +1,8 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
+using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Models.Entities.Specie;
 using PetFamily.Domain.Models.Ids;
@@ -8,9 +10,9 @@ using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Species.Create;
 
-public record CreateSpecieCommand(string SpecieName, IEnumerable<string> BreedNames);
+public record CreateSpecieCommand(string SpecieName, IEnumerable<string> BreedNames) : ICommand;
 
-public class CreateSpecieHandler
+public class CreateSpecieHandler : ICommandHandler<Guid, CreateSpecieCommand>
 {
     private readonly ISpeciesRepository _speciesRepository;
     private readonly ILogger<CreateSpecieHandler> _logger;

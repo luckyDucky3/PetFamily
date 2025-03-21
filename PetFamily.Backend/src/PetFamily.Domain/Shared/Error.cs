@@ -39,5 +39,5 @@ public record Error
         return new Error(parts[0], parts[1], errorType);
     }
     
-    public ErrorList ToErrorList() => new([this]);
+    public ErrorList? ToErrorList() => new([this]);
 }
