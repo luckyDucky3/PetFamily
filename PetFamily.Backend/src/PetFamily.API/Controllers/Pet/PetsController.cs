@@ -19,14 +19,14 @@ public class PetsController : ApplicationController
         var pets = await handler.Handle(query, cancellationToken);
         return Ok(pets);
     }
-    [HttpGet("pets/dapper")]
-    public async Task<ActionResult> GetPetsWithDapper(
-        [FromQuery] GetPetsWithPaginationRequest request,
-        [FromServices] GetPetsWithPaginationHandlerDapper handler,
-        CancellationToken cancellationToken = default)
-    {
-        var query = request.ToQuery();
-        var pets = await handler.Handle(query, cancellationToken);
-        return Ok(pets);
-    }
+    // [HttpGet("pets/dapper")]
+    // public async Task<ActionResult> GetPetsWithDapper(
+    //     [FromQuery] GetPetsWithPaginationRequest request,
+    //     [FromServices] GetPetsWithPaginationHandlerDapper handler,
+    //     CancellationToken cancellationToken = default)
+    // {
+    //     var query = request.ToQuery();
+    //     var pets = await handler.Handle(query, cancellationToken);
+    //     return Ok(pets);
+    // }
 }

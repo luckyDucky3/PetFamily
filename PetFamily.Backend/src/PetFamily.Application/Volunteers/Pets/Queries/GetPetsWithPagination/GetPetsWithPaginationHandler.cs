@@ -37,50 +37,50 @@ public class GetPetsWithPaginationHandler : IQueryHandler<PagedList<PetDto>, Get
 }
 
 //тестовый Handler, не участвующий в проекте
-public class GetPetsWithPaginationHandlerDapper : IQueryHandler<PagedList<PetDto>, GetPetsWithPaginationQuery>
-{
-    private readonly ISqlConnectionFactory _sqlConnectionFactory;
-
-    public GetPetsWithPaginationHandlerDapper(ISqlConnectionFactory sqlConnectionFactory)
-    {
-        _sqlConnectionFactory = sqlConnectionFactory;
-    }
-
-    public async Task<PagedList<PetDto>> Handle(GetPetsWithPaginationQuery query,
-        CancellationToken cancellationToken = default)
-    {
-        var connection = _sqlConnectionFactory.Create();
-
-        var parameters = new DynamicParameters();
-        parameters.Add("@PageSize", query.PageSize);
-        parameters.Add("@Offset", query.PageSize * (query.Page - 1));
-
-        var totalCount = await connection.ExecuteScalarAsync<long>("SELECT Count(*) FROM pet");
-
-        var sql = """
-                  SELECT pet.id, pet.name, pet.birth_date, pet.files
-                  FROM pet
-                  ORDER BY pet.position
-                  LIMIT @PageSize
-                  OFFSET @Offset
-                  """;
-        var pets = await connection.QueryAsync<PetDto, string, PetDto>(
-            sql,
-            (pet, jsonFiles) =>
-            {
-                var files = JsonSerializer.Deserialize<PetFileDto[]>(jsonFiles) ?? [];
-                pet.Files = files;
-                return pet;
-            },
-            splitOn: "files",
-            param: parameters);
-
-        return new PagedList<PetDto>()
-        {
-            TotalCount = totalCount,
-            Items = pets.ToList(),
-            PageSize = query.PageSize,
-            Page = query.Page
-        };
-    }
-}
+// public class GetPetsWithPaginationHandlerDapper : IQueryHandler<PagedList<PetDto>, GetPetsWithPaginationQuery>
+// {
+//     private readonly ISqlConnectionFactory _sqlConnectionFactory;
+//
+//     public GetPetsWithPaginationHandlerDapper(ISqlConnectionFactory sqlConnectionFactory)
+//     {
+//         _sqlConnectionFactory = sqlConnectionFactory;
+//     }
+//
+//     public async Task<PagedList<PetDto>> Handle(GetPetsWithPaginationQuery query,
+//         CancellationToken cancellationToken = default)
+//     {
+//         var connection = _sqlConnectionFactory.Create();
+//
+//         var parameters = new DynamicParameters();
+//         parameters.Add("@PageSize", query.PageSize);
+//         parameters.Add("@Offset", query.PageSize * (query.Page - 1));
+//
+//         var totalCount = await connection.ExecuteScalarAsync<long>("SELECT Count(*) FROM pet");
+//
+//         var sql = """
+//                   SELECT pet.id, pet.name, pet.birth_date, pet.files
+//                   FROM pet
+//                   ORDER BY pet.position
+//                   LIMIT @PageSize
+//                   OFFSET @Offset
+//                   """;
+//         var pets = await connection.QueryAsync<PetDto, string, PetDto>(
+//             sql,
+//             (pet, jsonFiles) =>
+//             {
+//                 var files = JsonSerializer.Deserialize<PetFileDto[]>(jsonFiles) ?? [];
+//                 pet.Files = files;
+//                 return pet;
+//             },
+//             splitOn: "files",
+//             param: parameters);
+//
+//         return new PagedList<PetDto>()
+//         {
+//             TotalCount = totalCount,
+//             Items = pets.ToList(),
+//             PageSize = query.PageSize,
+//             Page = query.Page
+//         };
+//     }
+//}
