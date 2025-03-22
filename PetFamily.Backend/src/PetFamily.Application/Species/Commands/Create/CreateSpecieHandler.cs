@@ -2,13 +2,12 @@ using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Abstractions;
-using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Models.Entities.Specie;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Species.Create;
+namespace PetFamily.Application.Species.Commands.Create;
 
 public record CreateSpecieCommand(string SpecieName, IEnumerable<string> BreedNames) : ICommand;
 
