@@ -1,9 +1,10 @@
 using System.Data;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace PetFamily.Application.Database;
 
-public interface IUnitOfWork
+public interface IUnitOfWork : IAsyncDisposable
 {
-    Task<IDbTransaction> BeginTransaction(CancellationToken cancellationToken = default);
+    Task<IDbContextTransaction> BeginTransaction(CancellationToken cancellationToken = default);
     Task SaveChanges(CancellationToken cancellationToken = default);
 }

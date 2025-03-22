@@ -29,6 +29,6 @@ public class BreedConfiguration : IEntityTypeConfiguration<Breed>
         builder.HasOne(b => b.Specie)
             .WithMany(s => s.Breeds)
             .HasForeignKey("specie_id")
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

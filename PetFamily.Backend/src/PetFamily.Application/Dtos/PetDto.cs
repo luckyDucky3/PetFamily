@@ -24,11 +24,9 @@ public class PetDto
     public Status Status { get; init; }
     public DateTime CreatedOn { get; init; }
     public PetFileDto[] Files { get; set; }
-    
     public Guid SpecieId { get; init; }
     public Guid BreedId { get; init; }
     
-    [Column("pet_volunteer_id")]
     public Guid VolunteerId { get; init; }
 }
 

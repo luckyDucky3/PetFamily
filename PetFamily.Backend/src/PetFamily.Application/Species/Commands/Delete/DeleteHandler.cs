@@ -13,7 +13,7 @@ public class DeleteHandler : ICommandHandler<Guid, DeleteCommand>
 
     public DeleteHandler(ISpeciesRepository repository)
     {
-        _repository = repository;
+       _repository = repository;
     }
     public async Task<Result<Guid, ErrorList>> Handle(
         DeleteCommand command, 
