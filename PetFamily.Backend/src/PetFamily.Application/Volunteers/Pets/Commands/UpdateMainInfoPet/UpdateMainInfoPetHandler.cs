@@ -5,14 +5,13 @@ using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
-using PetFamily.Application.FileProvider;
 using PetFamily.Application.Species;
 using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Volunteers.Pets.Commands.UpdatePet;
+namespace PetFamily.Application.Volunteers.Pets.Commands.UpdateMainInfoPet;
 
 public record UpdateMainInfoPetCommand(Guid VolunteerId, Guid PetId, PetMainInfoDto PetMainInfoDto) : ICommand;
 

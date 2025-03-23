@@ -12,7 +12,7 @@ using PetFamily.Application.Volunteers.Commands.SoftDelete;
 using PetFamily.Application.Volunteers.Commands.UpdateMainInfo;
 using PetFamily.Application.Volunteers.Pets.Commands.AddPet;
 using PetFamily.Application.Volunteers.Pets.Commands.RemovePet;
-using PetFamily.Application.Volunteers.Pets.Commands.UpdatePet;
+using PetFamily.Application.Volunteers.Pets.Commands.UpdateMainInfoPet;
 using PetFamily.Application.Volunteers.Pets.Commands.UploadFilesToPet;
 using PetFamily.Application.Volunteers.Pets.Queries.GetFilePet;
 using PetFamily.Application.Volunteers.Queries.GetVolunteerById;

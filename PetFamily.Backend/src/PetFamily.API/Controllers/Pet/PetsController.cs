@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Controllers.Pet.PetRequests;
 using PetFamily.API.Extensions;
 using PetFamily.API.Response;
-using PetFamily.Application.Volunteers.Pets.Commands.UpdatePet;
 using PetFamily.Application.Volunteers.Pets.Queries.GetPetsWithPagination;
 using PetFamily.Domain.Shared;
 

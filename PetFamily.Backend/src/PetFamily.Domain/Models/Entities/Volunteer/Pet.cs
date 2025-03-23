@@ -132,6 +132,9 @@ public sealed class Pet : SoftDeletableEntity<PetId>
         Status = status;
     }
     
+    public void UpdateStatus(Status status)
+    => Status = status;
+    
     public void SetPosition(Position position)
     {
         Position = position;
