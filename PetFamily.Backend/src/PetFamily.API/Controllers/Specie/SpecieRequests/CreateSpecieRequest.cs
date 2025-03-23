@@ -1,6 +1,6 @@
-using PetFamily.Application.Species.Create;
+using PetFamily.Application.Species.Commands.Create;
 
-namespace PetFamily.API.Specie.SpecieRequests;
+namespace PetFamily.API.Controllers.Specie.SpecieRequests;
 
 public record CreateSpecieRequest(string SpecieName, IEnumerable<string> BreedNames)
 {

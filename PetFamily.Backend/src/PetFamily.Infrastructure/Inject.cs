@@ -58,6 +58,7 @@ public static class Inject
     private static IServiceCollection AddDbContexts(this IServiceCollection services)
     {
         services.AddScoped<WriteDbContext>();
+        services.AddScoped<ReadDbContext>();
         services.AddScoped<IReadDbContext, ReadDbContext>();
         return services;
     }

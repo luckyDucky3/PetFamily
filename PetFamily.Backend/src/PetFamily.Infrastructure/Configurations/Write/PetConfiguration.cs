@@ -91,13 +91,14 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             pb.Property(sb => sb.BreedId)
                 .HasConversion(
                     b => b.Value,
-                    v => BreedId.Create(v));
+                    v => BreedId.Create(v))
+                .HasColumnName("breed_id");
 
             pb.Property(sb => sb.SpeciesId)
                 .HasConversion(
                     s => s.Value,
                     v => SpecieId.Create(v))
-                .HasColumnName("species_id");
+                .HasColumnName("specie_id");
         });
 
         builder.Property<bool>("IsDeleted")

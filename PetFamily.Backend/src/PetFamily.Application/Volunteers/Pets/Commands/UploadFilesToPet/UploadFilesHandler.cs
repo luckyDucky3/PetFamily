@@ -68,10 +68,13 @@ public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
             var fileData = new FileData(file.Stream, new FileInfo(filePath.Value, BUCKET_NAME));
             fileDataUploads.Add(fileData);
         }
-
+        var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
         var filePathsResult = await _fileProvider.UploadFiles(fileDataUploads, cancellationToken);
         if (filePathsResult.IsFailure)
+        {
+            await transaction.RollbackAsync(cancellationToken);
             return filePathsResult.Error.ToErrorList()!;
+        }
 
         var petFiles = filePathsResult.Value
             .Select(f => new PetFile(f))
@@ -80,7 +83,7 @@ public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
         pet.UpdateFiles(petFiles);
 
         await _unitOfWork.SaveChanges(cancellationToken);
-
+        await transaction.CommitAsync(cancellationToken);
         _logger.LogInformation("Uploaded files to pet - {id}", petResult.Value.Id.Value);
 
         return pet.Id.Value;
