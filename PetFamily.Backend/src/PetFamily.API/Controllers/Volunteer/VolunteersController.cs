@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PetFamily.API.Controllers.Pet.PetRequests;
 using PetFamily.API.Controllers.Processors;
 using PetFamily.API.Controllers.Volunteer.VolunteerRequests;
 using PetFamily.API.Extensions;
@@ -11,8 +12,9 @@ using PetFamily.Application.Volunteers.Commands.SoftDelete;
 using PetFamily.Application.Volunteers.Commands.UpdateMainInfo;
 using PetFamily.Application.Volunteers.Pets.Commands.AddPet;
 using PetFamily.Application.Volunteers.Pets.Commands.RemovePet;
+using PetFamily.Application.Volunteers.Pets.Commands.UpdatePet;
 using PetFamily.Application.Volunteers.Pets.Commands.UploadFilesToPet;
-using PetFamily.Application.Volunteers.Pets.Queries.GetPet;
+using PetFamily.Application.Volunteers.Pets.Queries.GetFilePet;
 using PetFamily.Application.Volunteers.Queries.GetVolunteerById;
 using PetFamily.Application.Volunteers.Queries.GetVolunteersWithPagination;
 
@@ -178,6 +180,22 @@ public class VolunteersController : ApplicationController
         return Ok(result.Value);
     }
 
+    [HttpPut("{id}/pet/{petId:guid}")]
+    public async Task<ActionResult> UpdateMainInfo(
+        [FromRoute] Guid id,
+        [FromRoute] Guid petId,
+        [FromBody] UpdateMainInfoPetRequest request,
+        [FromServices] UpdateMainInfoPetHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var command = request.ToCommand(id, petId, request.MainInfoDto);
+        var result = await handler.Handle(command, cancellationToken);
+        
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+        return Ok(result);
+    }
+    
 
     [HttpDelete("file")]
     public async Task<IActionResult> DeleteFile(
@@ -193,22 +211,11 @@ public class VolunteersController : ApplicationController
     [HttpGet("file-link")]
     public async Task<IActionResult> GetFileLink(
         [FromQuery] GetPetRequest request,
-        [FromServices] GetPetHandler getPetHandler,
+        [FromServices] GetFilePetHandler getFilePetHandler,
         CancellationToken cancellationToken = default)
     {
         var query = request.ToQuery();
-        var result = await getPetHandler.Handle(query, cancellationToken);
+        var result = await getFilePetHandler.Handle(query, cancellationToken);
         return Ok(result);
     }
 }
-
-public record RemovePetRequest(string FilePath, string BucketName)
-{
-    public RemovePetQuery ToQuery() => new RemovePetQuery(FilePath, BucketName);
-}
-
-public record GetPetRequest(string FilePath, string BucketName)
-{
-    public GetPetQuery ToQuery() => new GetPetQuery(FilePath, BucketName);
-}
-

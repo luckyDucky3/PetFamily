@@ -20,8 +20,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Volunteers\Pets\Commands\" />
       <Folder Include="Volunteers\Commands\" />
+      <Folder Include="Volunteers\Pets\Commands\ChooseGeneralPhoto\" />
+      <Folder Include="Volunteers\Pets\Commands\HardDeletePet\" />
+      <Folder Include="Volunteers\Pets\Commands\SoftDeletePet\" />
+      <Folder Include="Volunteers\Pets\Commands\UpdateStatus\" />
     </ItemGroup>
 
 </Project>

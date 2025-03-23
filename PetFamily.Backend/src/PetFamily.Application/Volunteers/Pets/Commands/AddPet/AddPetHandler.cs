@@ -3,9 +3,9 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
+using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.Species;
-using PetFamily.Application.Volunteers.Pets.Commands.PetDtos;
 using PetFamily.Domain.Enums;
 using PetFamily.Domain.Models.Entities.Volunteer;
 using PetFamily.Domain.Models.Ids;
@@ -72,7 +72,9 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
         return pet.Id.Value;
     }
 
-    private async Task<Result<Pet, Error>> InitPet(AddPetCommand command, CancellationToken cancellationToken = default)
+    private async Task<Result<Pet, Error>> InitPet (
+        AddPetCommand command,
+        CancellationToken cancellationToken = default)
     {
         PetId petId = PetId.NewPetId();
         SpecieId specieId = SpecieId.Create(command.SpecieId);

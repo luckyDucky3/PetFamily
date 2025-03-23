@@ -1,11 +1,8 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Mvc;
 using PetFamily.Domain.Enums;
-using PetFamily.Domain.Models.Ids;
 
 namespace PetFamily.Application.Dtos;
 
-public class PetDto
+public class PetMainInfoDto
 {
     public Guid Id { get; init; }
     public int Position { get; init; }
@@ -22,9 +19,6 @@ public class PetDto
     public DateTime BirthDate { get; init; }
     public Status Status { get; init; }
     public DateTime CreatedOn { get; init; }
-    public PetFileDto[] Files { get; set; }
     public Guid SpecieId { get; init; }
     public Guid BreedId { get; init; }
-    
-    public Guid VolunteerId { get; init; }
 }

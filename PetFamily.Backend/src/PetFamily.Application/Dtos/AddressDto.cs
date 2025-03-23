@@ -1,7 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using PetFamily.Domain.Shared;
-
-namespace PetFamily.Application.Volunteers.Pets.Commands.PetDtos;
+namespace PetFamily.Application.Dtos;
 
 public class AddressDto
 {

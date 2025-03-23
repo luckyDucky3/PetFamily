@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Controllers.Pet.PetRequests;
+using PetFamily.API.Extensions;
 using PetFamily.API.Response;
+using PetFamily.Application.Volunteers.Pets.Commands.UpdatePet;
 using PetFamily.Application.Volunteers.Pets.Queries.GetPetsWithPagination;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.API.Controllers.Pet;
 
@@ -9,8 +12,8 @@ namespace PetFamily.API.Controllers.Pet;
 [Route("[controller]")]
 public class PetsController : ApplicationController
 {
-    [HttpGet("pets")]
-    public async Task<ActionResult> GetPets(
+    [HttpGet]
+    public async Task<ActionResult> GetAllPets(
         [FromQuery] GetPetsWithPaginationRequest request,
         [FromServices] GetPetsWithPaginationHandler handler,
         CancellationToken cancellationToken = default)
@@ -19,6 +22,7 @@ public class PetsController : ApplicationController
         var pets = await handler.Handle(query, cancellationToken);
         return Ok(pets);
     }
+    
     // [HttpGet("pets/dapper")]
     // public async Task<ActionResult> GetPetsWithDapper(
     //     [FromQuery] GetPetsWithPaginationRequest request,
