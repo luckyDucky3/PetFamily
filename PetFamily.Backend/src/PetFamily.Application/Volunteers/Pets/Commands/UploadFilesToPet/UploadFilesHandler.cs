@@ -17,8 +17,6 @@ public record UploadFilesToPetCommand(Guid VolunteerId, Guid PetId, IEnumerable<
 
 public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
 {
-    private const string BUCKET_NAME = "photos";
-
     private readonly IFileProvider _fileProvider;
     private readonly ILogger<UploadFilesHandler> _logger;
     private readonly IVolunteersRepository _volunteersRepository;
@@ -67,7 +65,7 @@ public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
             if (filePath.IsFailure)
                 return filePath.Error.ToErrorList()!;
 
-            var fileData = new FileData(file.Stream, new FileInfo(filePath.Value, BUCKET_NAME));
+            var fileData = new FileData(file.Stream, new FileInfo(filePath.Value, Constants.BUCKET_NAME));
             fileDataUploads.Add(fileData);
         }
 
@@ -80,7 +78,7 @@ public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
         }
 
         var petFiles = filePathsResult.Value
-            .Select(f => new PetFile(f))
+            .Select(f => new PetFile(f, false))
             .ToList();
 
         pet.UpdateFiles(petFiles);

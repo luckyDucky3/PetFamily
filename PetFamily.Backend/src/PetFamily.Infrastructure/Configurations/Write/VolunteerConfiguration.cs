@@ -15,6 +15,11 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         builder.ToTable("volunteer");
         builder.HasKey(v => v.Id);
         
+        builder.HasMany(v => v.Pets)
+            .WithOne(p => p.Volunteer)
+            .HasForeignKey("volunteer_id")
+            .OnDelete(DeleteBehavior.Cascade);
+        
         builder.Property(v => v.Id)
             .HasConversion(
                 id => id.Value, 
@@ -66,11 +71,6 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         builder.Property(v => v.SocialNetworks)
             .JsonValueObjectCollectionConversion();
-        
-        builder.HasMany(v => v.Pets)
-            .WithOne(p => p.Volunteer)
-            .HasForeignKey("volunteer_id")
-            .OnDelete(DeleteBehavior.Cascade);
         
         builder.Property<bool>("IsDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)

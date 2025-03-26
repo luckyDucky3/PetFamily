@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using PetFamily.Application.Dtos;
 using PetFamily.Application.Models;
 
 namespace PetFamily.Application.Extensions;
@@ -18,7 +19,7 @@ public static class QueriesExtensions
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
-
+        
         return new PagedList<T>
         { 
             Items = items, 

@@ -56,7 +56,7 @@ public class VolunteersRepository : IVolunteersRepository
         await _writeDbContext.SaveChangesAsync(cancellationToken);
         return volunteer.Id.Value;
     }
-
+    
     public async Task<Volunteer?> GetByFullName(
         FullName fullName, 
         CancellationToken cancellationToken = default)
@@ -66,5 +66,10 @@ public class VolunteersRepository : IVolunteersRepository
             .FirstOrDefaultAsync(v => v.Name == fullName, cancellationToken);
 
         return volunteer;
+    }
+
+    public void FixDeletePet(Pet pet)
+    {
+        _writeDbContext.Entry(pet).State = EntityState.Deleted;
     }
 }

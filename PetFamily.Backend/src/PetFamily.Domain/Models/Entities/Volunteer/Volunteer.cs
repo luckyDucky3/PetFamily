@@ -130,6 +130,9 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
         return UnitResult.Success<Error>();
     }
 
+    public void RemovePet(Pet pet) =>
+        _pets.Remove(pet);
+
     public UnitResult<Error> MovePet(Pet pet, int newPosition)
     {
         if (newPosition > _pets.Count || newPosition < 0)
@@ -167,4 +170,5 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
         
         return UnitResult.Success<Error>();
     }
+    
 }

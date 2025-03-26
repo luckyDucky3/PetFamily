@@ -34,10 +34,10 @@ public static class EfPropertyExtensions
     {
         return builder.HasConversion(
             file => JsonSerializer.Serialize(
-                file.Select(f => new PetFileDto { PathToStorage = f.PathToStorage.Path }),
+                file.Select(f => new PetFileDto { PathToStorage = f.PathToStorage.Path, IsGeneral = f.IsGeneral, Size = f.Size}),
                 JsonSerializerOptions.Default),
             json => JsonSerializer.Deserialize<IReadOnlyList<PetFileDto>>(json, JsonSerializerOptions.Default)!
-                .Select(file => new PetFile(new FilePath(file.PathToStorage))).ToList(),
+                .Select(file => new PetFile(new FilePath(file.PathToStorage), false)).ToList(),
             new ValueComparer<IReadOnlyList<PetFile>>(
                 (c1, c2) => c1!.SequenceEqual(c2!),
                 c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),

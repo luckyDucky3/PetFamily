@@ -140,6 +140,18 @@ public sealed class Pet : SoftDeletableEntity<PetId>
         Position = position;
     }
 
+    public UnitResult<Error> ChangeExistFile(PetFile petFile)
+    {
+        var file = _files.FirstOrDefault(p => p.PathToStorage.Path == petFile.PathToStorage.Path);
+        if (file == null)
+            return Errors.General.IsNotFound();
+
+        _files.Remove(file);
+        _files.Add(petFile);
+        
+        return new UnitResult<Error>();
+    }
+    
     public void UpdateFiles(List<PetFile> petFiles)
         => _files = petFiles;
 }

@@ -14,4 +14,5 @@ public interface IVolunteersRepository
     Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default);
     Task<Guid> HardDelete(Volunteer volunteer, CancellationToken cancellationToken = default);
     Task<Volunteer?> GetByFullName(FullName fullName, CancellationToken cancellationToken = default);
+    void FixDeletePet(Pet pet);
 }
