@@ -4,16 +4,16 @@ using PetFamily.Application.FileProvider;
 using PetFamily.Domain.Models.VO;
 using FileInfo = PetFamily.Application.FileProvider.FileInfo;
 
-namespace PetFamily.Application.Volunteers.Pets.Queries.GetPet;
+namespace PetFamily.Application.Volunteers.Pets.Queries.GetFilePet;
 
 public record GetPetQuery(string FilePath, string BucketName) : IQuery;
 
-public class GetPetHandler : IQueryHandler<string, GetPetQuery>
+public class GetFilePetHandler : IQueryHandler<string, GetPetQuery>
 {
     private readonly IFileProvider _fileProvider;
-    private readonly ILogger<GetPetHandler> _logger;
+    private readonly ILogger<GetFilePetHandler> _logger;
 
-    public GetPetHandler(IFileProvider fileProvider, ILogger<GetPetHandler> logger)
+    public GetFilePetHandler(IFileProvider fileProvider, ILogger<GetFilePetHandler> logger)
     {
         _fileProvider = fileProvider;
         _logger = logger;

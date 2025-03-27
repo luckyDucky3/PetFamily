@@ -1,4 +1,4 @@
-namespace PetFamily.Application.Volunteers.Pets.Commands.PetDtos;
+namespace PetFamily.Application.Dtos;
 
 public class UploadFileDto
 {

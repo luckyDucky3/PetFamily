@@ -33,10 +33,21 @@ public sealed class Pet : SoftDeletableEntity<PetId>
     public IReadOnlyList<PetFile> Files => _files;
 
     private Pet(
-        PetId petId, string name, SpeciesBreeds speciesBreeds,
-        Color color, Address address, string description, string infoAboutHealth, double? weight,
-        double? height, PhoneNumber? phoneNumber, bool isCastrate,
-        bool isVaccinate, DateTime birthDate, Status status, IEnumerable<PetFile>? files = null) : this(petId)
+        PetId petId, 
+        string name,
+        SpeciesBreeds speciesBreeds,
+        Color color, 
+        Address address, 
+        string description, 
+        string infoAboutHealth, 
+        double? weight,
+        double? height, 
+        PhoneNumber? phoneNumber, 
+        bool isCastrate,
+        bool isVaccinate,
+        DateTime birthDate,
+        Status status, 
+        IEnumerable<PetFile>? files = null) : this(petId)
     {
         Name = name;
         Description = description;
@@ -57,11 +68,20 @@ public sealed class Pet : SoftDeletableEntity<PetId>
     }
 
     public static Result<Pet, Error> Create(
-        PetId petId, string name, SpeciesBreeds speciesBreeds,
-        Color color, Address address, string description = "", string infoAboutHealth = "",
-        double? weight = null, double? height = null, PhoneNumber? phoneNumber = null,
-        bool isCastrate = false, bool isVaccinate = false, DateTime birthDate = default,
-        Status status = Status.FindHome, IEnumerable<PetFile>? files = null)
+        PetId petId, 
+        string name, 
+        SpeciesBreeds speciesBreeds,
+        Color color, Address address,
+        string description = "", 
+        string infoAboutHealth = "",
+        double? weight = null, 
+        double? height = null, 
+        PhoneNumber? phoneNumber = null,
+        bool isCastrate = false, 
+        bool isVaccinate = false, 
+        DateTime birthDate = default,
+        Status status = Status.FindHome, 
+        IEnumerable<PetFile>? files = null)
     {
         if (string.IsNullOrWhiteSpace(name))
             return Result.Failure<Pet, Error>(Errors.General.IsRequired("Name"));
@@ -80,14 +100,58 @@ public sealed class Pet : SoftDeletableEntity<PetId>
             height, phoneNumber, isCastrate, isVaccinate,
             birthDate, status, files);
 
-        return Result.Success<Pet, Error>(pet);
+        return pet;
     }
 
+    public void UpdateMainInfo(
+        string name, 
+        SpeciesBreeds speciesBreeds,
+        Color color, Address address,
+        string description = "", 
+        string infoAboutHealth = "",
+        double? weight = null, 
+        double? height = null, 
+        PhoneNumber? phoneNumber = null,
+        bool isCastrate = false, 
+        bool isVaccinate = false, 
+        DateTime birthDate = default,
+        Status status = Status.FindHome)
+    {
+        Name = name;
+        SpeciesBreeds = speciesBreeds;
+        Color = color;
+        Address = address;
+        Description = description;
+        InfoAboutHealth = infoAboutHealth;
+        Weight = weight;
+        Height = height;
+        PhoneNumber = phoneNumber;
+        IsCastrate = isCastrate;
+        IsVaccinate = isVaccinate;
+        BirthDate = birthDate;
+        Status = status;
+    }
+    
+    public void UpdateStatus(Status status)
+    => Status = status;
+    
     public void SetPosition(Position position)
     {
         Position = position;
     }
 
+    public UnitResult<Error> ChangeExistFile(PetFile petFile)
+    {
+        var file = _files.FirstOrDefault(p => p.PathToStorage.Path == petFile.PathToStorage.Path);
+        if (file == null)
+            return Errors.General.IsNotFound();
+
+        _files.Remove(file);
+        _files.Add(petFile);
+        
+        return new UnitResult<Error>();
+    }
+    
     public void UpdateFiles(List<PetFile> petFiles)
         => _files = petFiles;
 }

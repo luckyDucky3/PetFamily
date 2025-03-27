@@ -3,9 +3,9 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
+using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.FileProvider;
-using PetFamily.Application.Volunteers.Pets.Commands.PetDtos;
 using PetFamily.Domain.Models.Ids;
 using PetFamily.Domain.Models.VO;
 using PetFamily.Domain.Shared;
@@ -17,8 +17,6 @@ public record UploadFilesToPetCommand(Guid VolunteerId, Guid PetId, IEnumerable<
 
 public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
 {
-    private const string BUCKET_NAME = "photos";
-
     private readonly IFileProvider _fileProvider;
     private readonly ILogger<UploadFilesHandler> _logger;
     private readonly IVolunteersRepository _volunteersRepository;
@@ -39,12 +37,14 @@ public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<Result<Guid, ErrorList>> Handle(UploadFilesToPetCommand command, CancellationToken cancellationToken)
+    public async Task<Result<Guid, ErrorList>> Handle(
+        UploadFilesToPetCommand command,
+        CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (!validationResult.IsValid)
             return validationResult.ToErrorList();
-        
+
         VolunteerId volunteerId = VolunteerId.Create(command.VolunteerId);
         var volunteer = await _volunteersRepository.GetById(volunteerId, cancellationToken);
         if (volunteer == null)
@@ -55,7 +55,7 @@ public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
             return petResult.Error.ToErrorList()!;
 
         var pet = petResult.Value;
-        
+
         List<FileData> fileDataUploads = [];
         foreach (var file in command.Files)
         {
@@ -65,9 +65,10 @@ public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
             if (filePath.IsFailure)
                 return filePath.Error.ToErrorList()!;
 
-            var fileData = new FileData(file.Stream, new FileInfo(filePath.Value, BUCKET_NAME));
+            var fileData = new FileData(file.Stream, new FileInfo(filePath.Value, Constants.BUCKET_NAME));
             fileDataUploads.Add(fileData);
         }
+
         var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
         var filePathsResult = await _fileProvider.UploadFiles(fileDataUploads, cancellationToken);
         if (filePathsResult.IsFailure)
@@ -77,7 +78,7 @@ public class UploadFilesHandler : ICommandHandler<Guid, UploadFilesToPetCommand>
         }
 
         var petFiles = filePathsResult.Value
-            .Select(f => new PetFile(f))
+            .Select(f => new PetFile(f, false))
             .ToList();
 
         pet.UpdateFiles(petFiles);

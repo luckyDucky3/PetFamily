@@ -2,11 +2,11 @@ using FluentValidation;
 using PetFamily.Application.Validations;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Volunteers.Pets.Commands.RemovePet;
+namespace PetFamily.Application.Volunteers.Pets.Queries.GetFilePet;
 
-public class RemovePetValidator : AbstractValidator<RemovePetQuery>
+public class GetFilePetValidator : AbstractValidator<GetPetQuery>
 {
-    public RemovePetValidator()
+    public GetFilePetValidator()
     {
         RuleFor(q => q.FilePath).NotEmpty().WithError(Errors.General.IsRequired());
         RuleFor(q => q.BucketName).NotEmpty().WithError(Errors.General.IsRequired());
