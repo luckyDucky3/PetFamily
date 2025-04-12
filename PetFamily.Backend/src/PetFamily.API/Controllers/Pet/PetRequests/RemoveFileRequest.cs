@@ -1,5 +1,4 @@
 using PetFamily.Application.Volunteers.Pets.Commands.RemoveFilePet;
-using PetFamily.Application.Volunteers.Pets.Commands.RemovePet;
 
 namespace PetFamily.API.Controllers.Pet.PetRequests;
 

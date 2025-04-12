@@ -10,7 +10,7 @@ public class WriteDbContext(IConfiguration configuration) : DbContext
 {
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
     public DbSet<Specie> Species => Set<Specie>();
-
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(configuration.GetConnectionString(Constants.DATABASE));

@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BCBBFB1B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Application.UnitTests", "PetFamily.Application.UnitTests\PetFamily.Application.UnitTests.csproj", "{B43ADE66-D8E0-48F6-A172-084A73B84BC1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Petfamily.Application.IntegrationTests", "src\tests\Petfamily.Application.IntegrationTests\Petfamily.Application.IntegrationTests.csproj", "{B90B6FAE-A3B9-4440-B3A0-32480A2F1B10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{B43ADE66-D8E0-48F6-A172-084A73B84BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B43ADE66-D8E0-48F6-A172-084A73B84BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B43ADE66-D8E0-48F6-A172-084A73B84BC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B90B6FAE-A3B9-4440-B3A0-32480A2F1B10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B90B6FAE-A3B9-4440-B3A0-32480A2F1B10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B90B6FAE-A3B9-4440-B3A0-32480A2F1B10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B90B6FAE-A3B9-4440-B3A0-32480A2F1B10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A95001F3-FAC8-42D6-B12C-1E6BB32846FA} = {8C0C350C-5969-41AE-92E5-FE39D34FE11C}
@@ -65,5 +71,6 @@ Global
 		{19516925-301C-41B8-BABC-FF4BDBD50A00} = {8C0C350C-5969-41AE-92E5-FE39D34FE11C}
 		{C1B9F5E9-507F-40B2-8993-2E5FF7C70022} = {BCBBFB1B-B972-4FA1-A111-17D6014F85F0}
 		{B43ADE66-D8E0-48F6-A172-084A73B84BC1} = {BCBBFB1B-B972-4FA1-A111-17D6014F85F0}
+		{B90B6FAE-A3B9-4440-B3A0-32480A2F1B10} = {BCBBFB1B-B972-4FA1-A111-17D6014F85F0}
 	EndGlobalSection
 EndGlobal

@@ -1,9 +1,7 @@
 using PetFamily.API.Extensions;
 using PetFamily.API.Middlewares;
 using PetFamily.Application;
-using PetFamily.Application.Volunteers;
 using PetFamily.Infrastructure;
-using PetFamily.Infrastructure.Repositories;
 using Serilog;
 using Serilog.Events;
 
@@ -46,3 +44,8 @@ app.UseRouting();
 app.MapControllers();
 
 app.Run();
+
+namespace PetFamily.API
+{
+    public partial class Program;
+}

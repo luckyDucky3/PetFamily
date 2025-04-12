@@ -1,9 +1,8 @@
 using FluentValidation;
 using PetFamily.Application.Validations;
-using PetFamily.Application.Volunteers.Pets.Commands.RemoveFilePet;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.Volunteers.Pets.Commands.RemovePet;
+namespace PetFamily.Application.Volunteers.Pets.Commands.RemoveFilePet;
 
 public class RemovePetValidator : AbstractValidator<RemoveFilePetQuery>
 {
